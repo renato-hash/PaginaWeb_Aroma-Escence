@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export function Carrito({ carrito, vaciarCarrito, eliminarDelCarrito }) {
+export function Carrito({ carrito, vaciarCarrito, eliminarDelCarrito, actualizarCantidad }) {
   const total = carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
 
   return (
@@ -17,9 +17,26 @@ export function Carrito({ carrito, vaciarCarrito, eliminarDelCarrito }) {
                 <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center p-3">
                   <div>
                     <h6 className="my-0 fw-bold">{item.nombre}</h6>
-                    <small className="text-muted">Cantidad: {item.cantidad} x ${item.precio.toLocaleString('es-CL')}</small>
+                    <small className="text-muted">${item.precio.toLocaleString('es-CL')} c/u</small>
                   </div>
-                  <div>
+                  <div className="d-flex align-items-center gap-2">
+                    <div className="btn-group btn-group-sm me-3" role="group">
+                      <button 
+                        type="button" 
+                        className="btn btn-outline-secondary"
+                        onClick={() => actualizarCantidad(item.id, item.cantidad - 1)}
+                      >
+                        -
+                      </button>
+                      <span className="btn btn-light disabled fw-bold text-dark">{item.cantidad}</span>
+                      <button 
+                        type="button" 
+                        className="btn btn-outline-secondary"
+                        onClick={() => actualizarCantidad(item.id, item.cantidad + 1)}
+                      >
+                        +
+                      </button>
+                    </div>
                     <span className="fw-bold me-3">${(item.precio * item.cantidad).toLocaleString('es-CL')}</span>
                     <button className="btn btn-sm btn-outline-danger" onClick={() => eliminarDelCarrito(item.id)}>Eliminar</button>
                   </div>
@@ -37,7 +54,6 @@ export function Carrito({ carrito, vaciarCarrito, eliminarDelCarrito }) {
                   <span>Total:</span>
                   <span className="text-success">${total.toLocaleString('es-CL')}</span>
                 </div>
-                {/* Al hacer clic, lleva a la pantalla de Checkout */}
                 <Link to="/checkout" className="btn btn-success w-100 py-2 fw-bold">
                   Ir al Checkout / Pagar 
                 </Link>

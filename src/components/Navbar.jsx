@@ -1,7 +1,35 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-export function Navbar({ cantidadCarrito, usuario, cerrarSesion, usuarioAdmin, cerrarSesionAdmin }) {
+export function Navbar({ 
+  cantidadCarrito, 
+  usuario, 
+  cerrarSesion, 
+  usuarioAdmin, 
+  cerrarSesionAdmin,
+  busqueda,
+  setBusqueda 
+}) {
+  const navigate = useNavigate();
+
+  const manejarCambio = (e) => {
+    const valor = e.target.value;
+    setBusqueda(valor);
+    if (valor.trim() !== '') {
+      navigate('/busqueda');
+    }
+  };
+
+  const irANosotros = (e) => {
+    e.preventDefault();
+    const piePagina = document.getElementById('pie-pagina');
+    if (piePagina) {
+      piePagina.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
       <div className="container">
@@ -20,13 +48,18 @@ export function Navbar({ cantidadCarrito, usuario, cerrarSesion, usuarioAdmin, c
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link" to="/">Catálogo</Link>
+              <Link className="nav-link" to="/">Inicio</Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/categorias">Categorías</Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/ofertas">Ofertas</Link>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#pie-pagina" onClick={irANosotros}>
+                Nosotros
+              </a>
             </li>
             {usuarioAdmin && (
               <li className="nav-item">
@@ -38,6 +71,16 @@ export function Navbar({ cantidadCarrito, usuario, cerrarSesion, usuarioAdmin, c
           </ul>
 
           <div className="d-flex align-items-center gap-2">
+            <div className="me-2">
+              <input
+                type="search"
+                className="form-control form-control-sm"
+                placeholder="Buscar perfume..."
+                value={busqueda}
+                onChange={manejarCambio}
+              />
+            </div>
+
             <Link to="/carrito" className="btn btn-outline-light position-relative me-2">
                Carrito
               {cantidadCarrito > 0 && (
@@ -47,7 +90,6 @@ export function Navbar({ cantidadCarrito, usuario, cerrarSesion, usuarioAdmin, c
               )}
             </Link>
 
-            {/* Menú Trabajador / Admin */}
             {usuarioAdmin ? (
               <div className="dropdown">
                 <button
@@ -75,7 +117,6 @@ export function Navbar({ cantidadCarrito, usuario, cerrarSesion, usuarioAdmin, c
               </Link>
             )}
 
-            {/* Menú Cliente */}
             {usuario ? (
               <div className="dropdown">
                 <button

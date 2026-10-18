@@ -27,13 +27,13 @@ export function Catalogo({ productos, agregarAlCarrito }) {
       id: 1,
       titulo: "Bienvenido a Aroma & Esencia",
       subtitulo: "Descubre nuestra exclusiva colección de perfumería boutique de alta gama.",
-      imagen: "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=1200"
+      imagen: "/images/bluechanel.jpg"
     },
     {
       id: 2,
       titulo: "Fragancias Exclusivas",
       subtitulo: "Explora nuestras familias olfativas: Florales, Amaderados, Cítricos, Orientales y más.",
-      imagen: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=1200"
+      imagen: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1200&h=600&q=80"
     },
     {
       id: 3,

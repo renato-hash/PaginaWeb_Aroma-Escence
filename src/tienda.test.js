@@ -36,7 +36,7 @@ describe('Pruebas Unitarias - Tienda Perfumes Aroma & Esencia', () => {
     expect(precioFormateado).toBe('$29.990');
   });
 
-  // 3. PRUEBAS DE ESTADO (STATE) Y LÓGICA
+  // 3. PRUEBAS DE ESTADO (STATE) Y LÓGICA DE CARRITO
   it('5. Debe agregar un perfume al carrito correctamente', () => {
     let carrito = [];
     const nuevoPerfume = productosSimulados[0];
@@ -70,7 +70,7 @@ describe('Pruebas Unitarias - Tienda Perfumes Aroma & Esencia', () => {
     expect(carrito[0].id).toBe(2);
   });
 
-  // 4. PRUEBAS DE EVENTOS Y MOCKS (VI.FN)
+  // 4. PRUEBAS DE EVENTOS, MOCKS Y FILTROS
   it('8. Debe simular el evento de agregar al carrito utilizando un Mock (vi.fn)', () => {
     const mockAgregar = vi.fn();
     const perfumeSeleccionado = productosSimulados[0];
@@ -102,5 +102,55 @@ describe('Pruebas Unitarias - Tienda Perfumes Aroma & Esencia', () => {
     expect(mockStorage.getItem).toHaveBeenCalledWith('aroma_carrito');
     expect(guardado.length).toBe(1);
     expect(guardado[0].cantidad).toBe(2);
+  });
+
+  // 6. PRUEBAS DE ORDENAMIENTO Y BÚSQUEDA
+  it('11. Debe ordenar los perfumes por precio de menor a mayor', () => {
+    const ordenados = [...productosSimulados].sort((a, b) => a.precio - b.precio);
+    expect(ordenados[0].id).toBe(3); // Citrus Gold ($27.990)
+    expect(ordenados[2].id).toBe(2); // Noche Mística ($34.990)
+  });
+
+  it('12. Debe ordenar los perfumes alfabéticamente por nombre (A-Z)', () => {
+    const ordenados = [...productosSimulados].sort((a, b) => a.nombre.localeCompare(b.nombre));
+    expect(ordenados[0].nombre).toBe('Perfume Citrus Gold');
+    expect(ordenados[2].nombre).toBe('Perfume Noche Mística');
+  });
+
+  it('13. Debe buscar perfumes por término ignorando mayúsculas y minúsculas', () => {
+    const terminoBusqueda = 'CITRUS';
+    const resultados = productosSimulados.filter(p =>
+      p.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase())
+    );
+    expect(resultados.length).toBe(1);
+    expect(resultados[0].id).toBe(3);
+  });
+
+  // 7. CÁLCULOS AVANZADOS Y NOTIFICACIONES
+  it('14. Debe calcular el total acumulado considerando precios y cantidades múltiples', () => {
+    const carritoCompleto = [
+      { id: 1, precio: 29990, cantidad: 2 },
+      { id: 2, precio: 34990, cantidad: 1 }
+    ];
+    const total = carritoCompleto.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+    expect(total).toBe(94970);
+  });
+
+  it('15. Debe simular el disparo de la notificación Toast al agregar un perfume', () => {
+    const mockMostrarToast = vi.fn();
+    const perfume = productosSimulados[0];
+
+    mockMostrarToast(`¡${perfume.nombre} añadido al carrito!`);
+
+    expect(mockMostrarToast).toHaveBeenCalledWith('¡Perfume Esencia Rosa añadido al carrito!');
+  });
+
+  it('16. Debe vaciar completamente el carrito al ejecutar la acción de reset', () => {
+    let carrito = [{ id: 1, cantidad: 2 }, { id: 2, cantidad: 1 }];
+    const vaciarCarrito = () => [];
+
+    carrito = vaciarCarrito();
+
+    expect(carrito.length).toBe(0);
   });
 });
