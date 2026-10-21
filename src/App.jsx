@@ -19,7 +19,7 @@ import { NotFound } from './pages/NotFound';
 
 export default function App() {
   const [productos, setProductos] = useState(() => {
-    const guardados = localStorage.getItem('aroma_productos_v4');
+    const guardados = localStorage.getItem('aroma_productos_v11');
     if (guardados) {
       try {
         const parsed = JSON.parse(guardados);
@@ -51,7 +51,7 @@ export default function App() {
   const [mensajeToast, setMensajeToast] = useState('');
 
   useEffect(() => {
-    localStorage.setItem('aroma_productos_v4', JSON.stringify(productos));
+    localStorage.setItem('aroma_productos_v11', JSON.stringify(productos));
   }, [productos]);
 
   useEffect(() => {

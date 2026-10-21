@@ -1,8 +1,9 @@
+// src/pages/Catalogo.jsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 function VideoPromocional() {
-  const youtubeVideoId = 'https://www.youtube.com/watch?v=SY-6WZ8fgVg';
+  const youtubeVideoId = 'SY-6WZ8fgVg';
 
   return (
     <div className="card shadow-sm border-0 rounded-4 overflow-hidden p-3 bg-white h-100 d-flex flex-column justify-content-center">
@@ -104,6 +105,7 @@ export function Catalogo({ productos, agregarAlCarrito }) {
 
   return (
     <div className="container my-4">
+      {/* HERO SECTION: VIDEO + CARRUSEL */}
       <div className="row g-4 mb-5 align-items-stretch">
         <div className="col-12 col-lg-5">
           <VideoPromocional />
@@ -161,13 +163,14 @@ export function Catalogo({ productos, agregarAlCarrito }) {
         </div>
       </div>
 
+      {/* BLOQUE DE OFERTAS DESTACADAS */}
       <div 
         className="p-4 rounded-4 border mb-5"
         style={{ backgroundColor: '#eaf4ed', borderColor: '#a3d9b1' }}
       >
         <div className="d-flex justify-content-between align-items-center mb-3">
           <div>
-            <h3 className="fw-bold text-dark m-0"> Ofertas Destacadas</h3>
+            <h3 className="fw-bold text-dark m-0">Ofertas Destacadas</h3>
             <p className="text-muted small m-0">Descuentos exclusivos por tiempo limitado</p>
           </div>
           <Link to="/ofertas" className="btn btn-outline-success btn-sm rounded-pill fw-bold">
@@ -177,36 +180,52 @@ export function Catalogo({ productos, agregarAlCarrito }) {
 
         <div className="row g-4">
           {productosOferta.map((prod) => {
-            const precioOriginal = Math.round(prod.precio * 1.25);
+            const precioBase = prod.tamanos ? prod.tamanos[0].precio : prod.precio;
+            
+            // 🎯 Redondeo comercial terminado en 90
+            const precioConDescuento = Math.floor((precioBase * 0.80) / 100) * 100 + 90;
+
+            const handleAgregarOfertaDestacada = () => {
+              agregarAlCarrito({
+                ...prod,
+                id: `${prod.id}-destacado-oferta`,
+                nombre: prod.tamanos 
+                  ? `${prod.nombre} (${prod.tamanos[0].ml}) - 20% OFF` 
+                  : `${prod.nombre} - 20% OFF`,
+                precio: precioConDescuento,
+                precioOriginal: precioBase
+              });
+            };
+
             return (
               <div key={`oferta-${prod.id}`} className="col-12 col-md-4">
-                <div className="card h-100 shadow-sm border-0 product-card position-relative bg-white">
+                <div className="card h-100 shadow-sm border-0 product-card position-relative bg-white rounded-4 overflow-hidden">
                   <span className="position-absolute top-0 start-0 bg-danger text-white fw-bold px-3 py-1 rounded-end mt-2 shadow-sm" style={{ zIndex: 5 }}>
                     20% OFF
                   </span>
                   <img
                     src={prod.imagen}
-                    className="card-img-top"
+                    className="card-img-top p-3"
                     alt={prod.nombre}
-                    style={{ height: '200px', objectFit: 'cover' }}
+                    style={{ height: '200px', objectFit: 'contain' }}
                     onError={(e) => {
                       e.target.src = 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600';
                     }}
                   />
                   <div className="card-body d-flex flex-column p-3">
-                    <span className="badge bg-secondary mb-2 align-self-start">{prod.categoria}</span>
+                    <span className="badge bg-secondary mb-2 align-self-start">{prod.categoria || 'Perfumes'}</span>
                     <h6 className="fw-bold mb-1">{prod.nombre}</h6>
                     <p className="text-muted small flex-grow-1 mb-2 text-truncate">{prod.descripcion}</p>
                     <div className="d-flex justify-content-between align-items-center pt-2 border-top">
                       <div>
                         <span className="text-muted text-decoration-line-through small me-2">
-                          ${precioOriginal.toLocaleString('es-CL')}
+                          ${precioBase.toLocaleString('es-CL')}
                         </span>
                         <span className="fw-bold text-danger fs-5">
-                          ${prod.precio.toLocaleString('es-CL')}
+                          ${precioConDescuento.toLocaleString('es-CL')}
                         </span>
                       </div>
-                      <button className="btn btn-success btn-sm fw-bold" onClick={() => agregarAlCarrito(prod)}>
+                      <button className="btn btn-success btn-sm fw-bold rounded-pill" onClick={handleAgregarOfertaDestacada}>
                         + Agregar
                       </button>
                     </div>
@@ -218,6 +237,7 @@ export function Catalogo({ productos, agregarAlCarrito }) {
         </div>
       </div>
 
+      {/* PERFUMES VIRALES */}
       <div className="mb-5">
         <h3 className="fw-bold text-dark mb-3">Perfumes virales</h3>
         <div className="row g-3 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5">
@@ -277,6 +297,7 @@ export function Catalogo({ productos, agregarAlCarrito }) {
         </div>
       </div>
 
+      {/* CLIENTES FELICES */}
       <div 
         className="p-4 rounded-4 border mb-5"
         style={{ backgroundColor: '#eaf4ed', borderColor: '#a3d9b1' }}
@@ -307,31 +328,32 @@ export function Catalogo({ productos, agregarAlCarrito }) {
         </div>
       </div>
 
+      {/* CATÁLOGO COMPLETO */}
       <h2 className="fw-bold mb-4">Catálogo Completo</h2>
       <div className="row g-4">
         {productos.map((prod) => (
           <div key={prod.id} className="col-12 col-md-6 col-lg-4">
-            <div className="card h-100 shadow-sm border-0 product-card">
+            <div className="card h-100 shadow-sm border-0 product-card rounded-4 bg-white overflow-hidden">
               <img
                 src={prod.imagen}
-                className="card-img-top"
+                className="card-img-top p-3"
                 alt={prod.nombre}
-                style={{ height: '220px', objectFit: 'cover' }}
+                style={{ height: '220px', objectFit: 'contain' }}
                 onError={(e) => {
                   e.target.src = 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600';
                 }}
               />
               <div className="card-body d-flex flex-column p-4">
-                <span className="badge bg-secondary mb-2 align-self-start">{prod.categoria}</span>
+                <span className="badge bg-secondary mb-2 align-self-start">{prod.categoria || 'Perfumes'}</span>
                 <h5 className="fw-bold mb-2">{prod.nombre}</h5>
                 <p className="text-muted small flex-grow-1">{prod.descripcion}</p>
                 <div className="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
                   <span className="fw-bold fs-5">${prod.precio.toLocaleString('es-CL')}</span>
                   <div>
-                    <Link to={`/producto/${prod.id}`} className="btn btn-outline-dark btn-sm me-2">
+                    <Link to={`/producto/${prod.id}`} className="btn btn-outline-dark btn-sm rounded-pill me-2">
                       Ver detalle
                     </Link>
-                    <button className="btn btn-primary btn-sm" onClick={() => agregarAlCarrito(prod)}>
+                    <button className="btn btn-primary btn-sm rounded-pill" onClick={() => agregarAlCarrito(prod)}>
                       + Agregar
                     </button>
                   </div>
@@ -344,3 +366,5 @@ export function Catalogo({ productos, agregarAlCarrito }) {
     </div>
   );
 }
+
+export default Catalogo;
