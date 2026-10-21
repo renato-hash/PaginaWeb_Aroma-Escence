@@ -36,7 +36,7 @@ export const productosIniciales = [
     ],
     descripcion: "Una explosión especiada y ardiente de jengibre rojo y vainilla de Borbón.",
     descripcionLarga: "Perfume ultra sensorial e intenso. Combina la calidez del jengibre con maderas incandescentes y una adictiva vainilla.",
-    imagen: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/the_most_wanted_parfum.webp",
     stock: 10,
     notas: {
       salida: "Jengibre rojo",
@@ -59,7 +59,7 @@ export const productosIniciales = [
     ],
     descripcion: "Aroma ambarado y dulce con toques de pimienta rosa, toffee y canela.",
     descripcionLarga: "Una fragancia audaz que refleja la fuerza del amor con acordes cálidos de vainilla, castaña glaseada y especias potentes.",
-    imagen: "https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/stronger_intensely.webp",
     stock: 15,
     notas: {
       salida: "Pimienta rosa, Enebro de Virginia y Violeta",
@@ -80,7 +80,7 @@ export const productosIniciales = [
     ],
     descripcion: "Perfume embriagador reforzado con un licoroso acorde de ron y castaña.",
     descripcionLarga: "La interpretación más intensa de la colección. Fusiona ron balsámico con lavanda francesa y madera de cedro ahumado.",
-    imagen: "https://images.unsplash.com/photo-1583445013765-46c20c4a6772?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/Perfume_Emporio_Armani_Stronger_With_You_Absolutely_100ml_3.jpg",
     stock: 8,
     notas: {
       salida: "Ron, Bergamota y Elemi",
@@ -89,7 +89,6 @@ export const productosIniciales = [
     }
   },
 
-  // --- JEAN PAUL GAULTIER ---
   {
     id: 5,
     nombre: "Scandal Le Parfum",
@@ -103,7 +102,7 @@ export const productosIniciales = [
     ],
     descripcion: "Fragancia escandalosamente sensual con notas de geranio, haba tonka y sándalo.",
     descripcionLarga: "Un nocaut olfativo que derrocha elegancia y misterio en la noche. Perfecto para llamar la atención en cualquier evento.",
-    imagen: "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/scandal_parfum.jpg",
     stock: 14,
     notas: {
       salida: "Geranio fresco",
@@ -125,7 +124,7 @@ export const productosIniciales = [
     ],
     descripcion: "Elixir ultra seductor con piña chispeante, madera de coco y haba tonka.",
     descripcionLarga: "Una tentación oriental amaderada que combina la frescura tropical de la piña con la calidez del coco tostado.",
-    imagen: "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/le_beau_le_parfum.webp",
     stock: 11,
     notas: {
       salida: "Piña, Iris, Ciprés y Jengibre",
@@ -149,7 +148,7 @@ export const productosIniciales = [
     ],
     descripcion: "El pico máximo de intensidad de Invictus con pimienta negra, incienso y vainilla.",
     descripcionLarga: "Un elixir potente y triunfador. Mezcla la frescura especiada del cardamomo con un corazón de incienso ahumado y vainilla dulce.",
-    imagen: "https://images.unsplash.com/photo-1506812574058-fc75fa93fead?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/invictus_elixir.webp",
     stock: 13,
     notas: {
       salida: "Cardamomo, Pimienta negra y Cítricos",
@@ -166,7 +165,7 @@ export const productosIniciales = [
     acordes: ['amaderado', 'aromático', 'cálido especiado', 'dulce', 'cítrico'],
     descripcion: "Aroma amaderado fresco con lavanda, salvia y madera de benjuí.",
     descripcionLarga: "Una leyenda reinventada para la realeza moderna. Mezcla refrescante bergamota con acordes amaderados nobles.",
-    imagen: "https://images.unsplash.com/photo-1616949755610-8c9bbc08f138?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/million-royal-rabanne.webp",
     stock: 9,
     notas: {
       salida: "Cardamomo, Mandarina y Bergamota",
@@ -175,7 +174,7 @@ export const productosIniciales = [
     }
   },
 
-  // --- RASASI ---
+
   {
     id: 9,
     nombre: "Hawas Ice for Him",
@@ -189,7 +188,7 @@ export const productosIniciales = [
     ],
     descripcion: "Evolución ultra helada y refrescante del clásico Hawas con manzana gélida y ciruela.",
     descripcionLarga: "Potencia, proyección y frescura marina extrema. Diseñado para destacar en días calurosos con un toque de musgo helado.",
-    imagen: "https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/RASASI-HAWAS-ICE_5.webp",
     stock: 20,
     notas: {
       salida: "Manzana helada, Bergamota, Limón y Menta glaciar",
@@ -206,7 +205,7 @@ export const productosIniciales = [
     acordes: ['cálido especiado', 'ámbar', 'incienso', 'amaderado', 'cítrico', 'cuero'],
     descripcion: "Aroma cálido, ambarado y especiado con toques de pimienta y maderas oscuras.",
     descripcionLarga: "La faceta apasionada de la saga Hawas. Un perfume oriental ardiente que equilibra notas cítricas picantes con incienso.",
-    imagen: "https://images.unsplash.com/photo-1563178406-4cdc2923acbc?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/Hawas_Fire_Web_2.png",
     stock: 18,
     notas: {
       salida: "Pimienta negra, Pomelo chispeante y Cardamomo",
@@ -225,7 +224,7 @@ export const productosIniciales = [
     acordes: ['marino', 'acuático', 'fresco', 'cítrico', 'aromático', 'herbal'],
     descripcion: "Sensación marina vibrante con notas de brisa oceánica y cítricos brillantes.",
     descripcionLarga: "Un perfume acuático moderno de alta fijación. Evoca la frescura de las olas del mar con matices herbales limpísimos.",
-    imagen: "https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/rayhaan_aquatica.webp",
     stock: 25,
     notas: {
       salida: "Notas marinas, Bergamota y Salvia",
@@ -242,7 +241,7 @@ export const productosIniciales = [
     acordes: ['tropical', 'afrutado', 'dulce', 'cítrico', 'amaderado', 'fresco'],
     descripcion: "Coctel frutal exótico con mango, fruta de la pasión y toques amaderados.",
     descripcionLarga: "Una explosión de energía tropical llena de jugosidad y buena vibra. Ideal para amantes de aromas frutales veraniegos.",
-    imagen: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/rayhaan-tropical-vibe-eau-de-parfum-perfume-unissex-6297001571255-bnp-03-800x800.webp",
     stock: 22,
     notas: {
       salida: "Mango maduro, Fruta de la pasión y Lima",
@@ -265,7 +264,7 @@ export const productosIniciales = [
     ],
     descripcion: "Sensacional perfume oriental especiado con canela, praliné y fechas dulces.",
     descripcionLarga: "El fenómeno viral de la perfumería árabe. Un elixir opulento que huele a pastel de canela, praliné y vainilla licorosa.",
-    imagen: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/khamra no.webp",
     stock: 30,
     notas: {
       salida: "Canela, Nuez moscada y Bergamota",
@@ -286,7 +285,7 @@ export const productosIniciales = [
     ],
     descripcion: "Aroma amaderado potente con notas de piña ahumada, pimienta y vainilla.",
     descripcionLarga: "Una fragancia viril y elegante de carácter imponente. Destaca por su gran fijación y estela cálida especiada.",
-    imagen: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/asad_elixir.webp",
     stock: 28,
     notas: {
       salida: "Pimienta negra, Piña y Tabaco",
@@ -381,7 +380,7 @@ export const productosIniciales = [
     ],
     descripcion: "Aroma fresco, amaderado y nocturno con matices de bergamota y vainilla.",
     descripcionLarga: "Inspirado en el desierto en la hora mágica del atardecer. La frescura de Sauvage se enriquece con matices cálidos de vainilla.",
-    imagen: "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/dior_sauvage.webp",
     stock: 15,
     notas: {
       salida: "Bergamota de Reggio di Calabria",
@@ -429,7 +428,7 @@ export const productosIniciales = [
     ],
     descripcion: "Elegancia atemporal con notas de pomelo fresco, incienso y sándalo de Nueva Caledonia.",
     descripcionLarga: "El elogio a la libertad masculina. Un aroma aromático amaderado de estela pura, cautivadora e inconfundible.",
-    imagen: "https://images.unsplash.com/photo-1616949755610-8c9bbc08f138?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/blue_channel.jpg",
     stock: 10,
     notas: {
       salida: "Pomelo, Limón, Menta y Pimienta Rosa",
@@ -475,7 +474,7 @@ export const productosIniciales = [
     ],
     descripcion: "Equilibrio perfecto entre manzana verde crujiente, salvia aromática y haba tonka.",
     descripcionLarga: "Representa la autorrealización del hombre moderno. Una fragancia fougère profunda con notas amaderadas duraderas.",
-    imagen: "https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/ysl.webp",
     stock: 14,
     notas: {
       salida: "Manzana verde, Jengibre y Bergamota",
@@ -496,7 +495,7 @@ export const productosIniciales = [
     ],
     descripcion: "Fusión moderna de azahar de Túnez, bergamota fresca y pachulí amaderado.",
     descripcionLarga: "Una declaración de masculinidad contemporánea. El contraste entre la delicadeza floral del azahar y maderas limpias.",
-    imagen: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/YSL Myslf.jpg",
     stock: 12,
     notas: {
       salida: "Bergamota de Calabria y Bergamota verde",
@@ -608,7 +607,7 @@ export const productosIniciales = [
     acordes: ['dulce', 'afrutado', 'cálido especiado', 'vainilla', 'lavanda', 'amaderado'],
     descripcion: "Dulce combinación nocturna de manzana verde, canela, lavanda y tonka.",
     descripcionLarga: "El rey de las salidas nocturnas. Un perfume juvenil, vibrante y dulce con una fijación excepcional.",
-    imagen: "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/afnan.webp",
     stock: 28,
     notas: {
       salida: "Manzana, Canela, Lavanda silvestre y Bergamota",
@@ -630,7 +629,7 @@ export const productosIniciales = [
     ],
     descripcion: "Contraste apasionado entre cítricos italianos picantes, pimienta y tonka.",
     descripcionLarga: "Un perfume encendido de pasión. Mezcla chinotto italiano con romero, pimienta negra y maderas sensuales.",
-    imagen: "https://images.unsplash.com/photo-1506812574058-fc75fa93fead?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/versace_eros.webp",
     stock: 13,
     notas: {
       salida: "Chinotto, Mandarina, Pimienta Negra, Romero y Limón",
@@ -653,7 +652,7 @@ export const productosIniciales = [
     ],
     descripcion: "Aroma mediterráneo azul con notas acuáticas, bergamota, incienso y pimienta.",
     descripcionLarga: "Captura la frescura del mar y la sofisticación nocturna. Muy versátil y alabado en cualquier época del año.",
-    imagen: "https://images.unsplash.com/photo-1616949755610-8c9bbc08f138?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/dylan_blue.jpg",
     stock: 16,
     notas: {
       salida: "Notas acuáticas, Bergamota de Calabria, Pomelo y Hojas de Higuera",
@@ -704,7 +703,7 @@ export const productosIniciales = [
     acordes: ['cálido especiado', 'café', 'dulce', 'canela', 'vainilla', 'amaderado'],
     descripcion: "La versión enriquecida de Khamrah con notas de café arábigo tostado y cardamomo.",
     descripcionLarga: "Añade un toque picante y un concentrado de café tostado a la fórmula original de Khamrah. Pura adicción gourmet.",
-    imagen: "https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&q=80&w=600",
+    imagen: "public/images/khamra_qahwa.webp",
     stock: 20,
     notas: {
       salida: "Canela, Cardamomo y Jengibre",
