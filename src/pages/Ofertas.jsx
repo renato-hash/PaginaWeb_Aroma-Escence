@@ -12,7 +12,7 @@ function TarjetaOferta({ prod, agregarAlCarrito }) {
 
   const precioBase = tamanoSeleccionado ? tamanoSeleccionado.precio : prod.precio;
   
-  // 🎯 Redondeo a número terminado en 90
+  
   const precioConDescuento = Math.floor((precioBase * 0.80) / 100) * 100 + 90;
 
   const handleAprovechar = () => {

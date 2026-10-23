@@ -105,7 +105,7 @@ export function Catalogo({ productos, agregarAlCarrito }) {
 
   return (
     <div className="container my-4">
-      {/* HERO SECTION: VIDEO + CARRUSEL */}
+   
       <div className="row g-4 mb-5 align-items-stretch">
         <div className="col-12 col-lg-5">
           <VideoPromocional />
@@ -163,7 +163,7 @@ export function Catalogo({ productos, agregarAlCarrito }) {
         </div>
       </div>
 
-      {/* BLOQUE DE OFERTAS DESTACADAS */}
+  
       <div 
         className="p-4 rounded-4 border mb-5"
         style={{ backgroundColor: '#eaf4ed', borderColor: '#a3d9b1' }}
@@ -182,7 +182,7 @@ export function Catalogo({ productos, agregarAlCarrito }) {
           {productosOferta.map((prod) => {
             const precioBase = prod.tamanos ? prod.tamanos[0].precio : prod.precio;
             
-            // 🎯 Redondeo comercial terminado en 90
+    
             const precioConDescuento = Math.floor((precioBase * 0.80) / 100) * 100 + 90;
 
             const handleAgregarOfertaDestacada = () => {
@@ -237,7 +237,7 @@ export function Catalogo({ productos, agregarAlCarrito }) {
         </div>
       </div>
 
-      {/* PERFUMES VIRALES */}
+   
       <div className="mb-5">
         <h3 className="fw-bold text-dark mb-3">Perfumes virales</h3>
         <div className="row g-3 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5">
@@ -297,7 +297,7 @@ export function Catalogo({ productos, agregarAlCarrito }) {
         </div>
       </div>
 
-      {/* CLIENTES FELICES */}
+ 
       <div 
         className="p-4 rounded-4 border mb-5"
         style={{ backgroundColor: '#eaf4ed', borderColor: '#a3d9b1' }}
@@ -328,7 +328,7 @@ export function Catalogo({ productos, agregarAlCarrito }) {
         </div>
       </div>
 
-      {/* CATÁLOGO COMPLETO */}
+    
       <h2 className="fw-bold mb-4">Catálogo Completo</h2>
       <div className="row g-4">
         {productos.map((prod) => (

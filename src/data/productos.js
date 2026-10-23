@@ -1,7 +1,7 @@
 // src/data/productos.js
 
 export const productosIniciales = [
-  // --- AZZARO ---
+
   {
     id: 1,
     nombre: "Azzaro The Most Wanted EDP Intense",
@@ -45,7 +45,7 @@ export const productosIniciales = [
     }
   },
 
-  // --- EMPORIO ARMANI ---
+
   {
     id: 3,
     nombre: "Stronger With You Intensely",
@@ -133,7 +133,7 @@ export const productosIniciales = [
     }
   },
 
-  // --- PACO RABANNE ---
+
   {
     id: 7,
     nombre: "Invictus Victory Elixir",
@@ -214,7 +214,7 @@ export const productosIniciales = [
     }
   },
 
-  // --- RAYHAAN ---
+
   {
     id: 11,
     nombre: "Rayhaan Aquatica",
@@ -250,7 +250,7 @@ export const productosIniciales = [
     }
   },
 
-  // --- LATTAFA ---
+
   {
     id: 13,
     nombre: "Lattafa Khamrah",
@@ -295,76 +295,89 @@ export const productosIniciales = [
   },
   {
     id: 15,
-    nombre: "Lattafa Yara EDP",
-    marca: "Lattafa",
-    precio: 29990,
-    categoria: "Florales",
-    acordes: ['dulce', 'atalcado', 'tropical', 'afrutado', 'floral', 'vainilla'],
-    descripcion: "Suave y cremosa mezcla de orquídeas, frutas tropicales y crema batida de vainilla.",
-    descripcionLarga: "Icono femenino irresistible. Entrega una sensación atalcada, dulce y frutal extremadamente reconfortante.",
-    imagen: "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600",
-    stock: 25,
+    nombre: "Afnan 9 PM Out Night",
+    marca: "Afnan",
+    precio: 36990,
+    categoria: "Gourmand",
+    acordes: ['dulce', 'afrutado', 'cálido especiado', 'vainilla', 'lavanda', 'amaderado'],
+    tamanos: [
+      { ml: '50 ml', precio: 26990, stock: 3 },
+      { ml: '100 ml', precio: 36990, stock: 15 }
+    ],
+    descripcion: "Vibrante y dulce combinación nocturna con manzana, canela, lavanda y vainilla.",
+    descripcionLarga: "Inspirado en la energía de las salidas nocturnas. Una fragancia moderna de alta proyección con acordes gourmand irresistibles.",
+    imagen: "public/images/9pm_out_night.webp",
+    stock: 18,
     notas: {
-      salida: "Orquídea, Heliotropo y Tangerina",
-      corazon: "Acorde Gourmand y Frutas tropicales",
-      fondo: "Vainilla, Almizcle y Sándalo"
+      salida: "Manzana verde, Canela, Lavanda y Bergamota",
+      corazon: "Flor de Azahar del Naranjo y Lirio de los Valles",
+      fondo: "Vainilla, Haba Tonka, Ámbar y Pachulí"
     }
   },
   {
     id: 16,
-    nombre: "Lattafa Bade'e Al Oud Honor & Glory",
-    marca: "Lattafa",
-    precio: 38990,
-    categoria: "Gourmand",
-    acordes: ['afrutado', 'dulce', 'cálido especiado', 'vainilla', 'amaderado'],
-    descripcion: "Exquisita armonía de piña brulée, canela, cúrcuma y crema de vainilla.",
-    descripcionLarga: "Una obra maestra gourmet. Mezcla el dulzor frutal de la piña caramelizada con especias nobles y fondo amaderado.",
-    imagen: "https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&q=80&w=600",
-    stock: 16,
-    notas: {
-      salida: "Piña Brulee y Cúrcuma",
-      corazon: "Canela, Pimienta negra y Benzoin",
-      fondo: "Vainilla, Cashmeran, Sándalo y Moss"
-    }
-  },
-
-  // --- MAISON ALHAMBRA ---
-  {
-    id: 17,
-    nombre: "Maison Alhambra Jean Lowe Noir",
+    nombre: "Sceptre Malachite",
     marca: "Maison Alhambra",
-    precio: 35990,
-    categoria: "Amaderados",
-    acordes: ['incienso', 'amaderado', 'cuero', 'rosa', 'cálido especiado', 'ahumado'],
-    descripcion: "Profunda combinación de incienso, rosa de Damasco y madera de Oud ahumada.",
-    descripcionLarga: "Elegancia nocturna de nicho. Inspirado en perfumes orientales oscuros con una estela sofisticada de cuero y resinas.",
-    imagen: "https://images.unsplash.com/photo-1583445013765-46c20c4a6772?auto=format&fit=crop&q=80&w=600",
+    precio: 39990,
+    categoria: "Orientales",
+    acordes: ['ámbar', 'cálido especiado', 'amaderado', 'fresco especiado', 'aromático'],
+    tamanos: [
+      { ml: '50 ml', precio: 29990, stock: 3 },
+      { ml: '100 ml', precio: 39990, stock: 11 }
+    ],
+    descripcion: "Elegante mezcla oriental ambarada con azafrán, especias nobles y resinas raras.",
+    descripcionLarga: "Inspirado en la alta perfumería de nicho. Combina notas cítricas de salida con un corazón especiado y un fondo ambarado profundo.",
+    imagen: "public/images/Maison-Alhambra-Sceptre-Malachite-EDP.jpg",
     stock: 14,
     notas: {
-      salida: "Incienso y Salvia",
-      corazon: "Rosa, Azafrán y Pachulí",
-      fondo: "Oud, Cuero y Ámbar"
+      salida: "Mandarina verde y Bergamota",
+      corazon: "Azafrán, Cardamomo y Notas Especiadas",
+      fondo: "Ámbar mineral, Madera de Oud y Almizcle"
+    }
+  },
+  {
+    id: 17,
+    nombre: "Vulcan Feu",
+    marca: "French Avenue",
+    precio: 45990,
+    categoria: "Amaderados",
+    acordes: ['cálido especiado', 'ahumado', 'amaderado', 'ámbar', 'cuero'],
+    tamanos: [
+      { ml: '50 ml', precio: 34990, stock: 3 },
+      { ml: '100 ml', precio: 45990, stock: 9 }
+    ],
+    descripcion: "Intensa fragancia volcánica con pimienta, ron ahumado, incienso y maderas nobles.",
+    descripcionLarga: "Una creación imponente de carácter ardiente. Fusiona la calidez del ron envejecido con incienso resinoso y un fondo de ámbar y cuero.",
+    imagen: "public/images/vulcan_fue.jpg",
+    stock: 12,
+    notas: {
+      salida: "Pimienta negra, Jengibre picante y Bergamota",
+      corazon: "Incienso ahumado, Ron y Canela",
+      fondo: "Madera de Cedro, Ámbar volcánico y Cuero"
     }
   },
   {
     id: 18,
-    nombre: "Maison Alhambra Porto Neroli",
-    marca: "Maison Alhambra",
-    precio: 31990,
-    categoria: "Cítricos",
-    acordes: ['cítrico', 'blanco floral', 'fresco', 'aromático', 'verde'],
-    descripcion: "Chispeante aroma de azahar italiano, neroli, bergamota y brisa de la Riviera.",
-    descripcionLarga: "Un viaje directo a la costa italiana. Captura la brisa fresca del mar y los campos de limoneros en flor.",
-    imagen: "https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&q=80&w=600",
-    stock: 19,
+    nombre: "Hawas Kobra",
+    marca: "Rasasi",
+    precio: 58990,
+    categoria: "Frescos",
+    acordes: ['fresco especiado', 'marino', 'cítrico', 'aromático', 'amaderado'],
+    tamanos: [
+      { ml: '50 ml', precio: 42990, stock: 3 },
+      { ml: '100 ml', precio: 58990, stock: 12 }
+    ],
+    descripcion: "Evolución potente de la saga Hawas con notas marinas intensas, cítricos y ambroxan.",
+    descripcionLarga: "Seducción acuática extrema. Diseñado para ofrecer proyección duradera con una brisa marina refrescante y acordes especiados.",
+    imagen: "public/images/hawas_kobra.webp",
+    stock: 15,
     notas: {
-      salida: "Neroli, Limón de Amalfi, Mandarina y Bergamota",
-      corazon: "Flor de Azahar del Naranjo, Jazmín y Pitósporo",
-      fondo: "Ámbar, Angélica y Almizcle"
+      salida: "Bergamota chispeante, Notas marinas y Pomelo",
+      corazon: "Especias frías, Lavanda y Salvia",
+      fondo: "Ambroxan, Madera de Deriva y Pachulí"
     }
   },
-
-  // --- DIOR ---
+  
   {
     id: 19,
     nombre: "Dior Sauvage EDP",
@@ -389,30 +402,28 @@ export const productosIniciales = [
     }
   },
   {
-    id: 20,
-    nombre: "Dior Fahrenheit EDT",
-    marca: "Dior",
-    precio: 109990,
-    categoria: "Amaderados",
-    acordes: ['cuero', 'amaderado', 'fresco especiado', 'verde', 'floral', 'ozónico'],
+   id: 20,
+    nombre: "Lattafa The Kingdom",
+    marca: "Lattafa",
+    precio: 42990,
+    categoria: "Gourmand",
+    acordes: ['dulce', 'cálido especiado', 'vainilla', 'lavanda', 'amaderado', 'ámbar'],
     tamanos: [
-      { ml: '50 ml', precio: 84990, stock: 2 },
-      { ml: '75 ml', precio: 96990, stock: 2 },
-      { ml: '100 ml', precio: 109990, stock: 2 },
-      { ml: '125 ml', precio: 124990, stock: 1 }
+      { ml: '50 ml', precio: 31990, stock: 3 },
+      { ml: '100 ml', precio: 42990, stock: 14 }
     ],
-    descripcion: "Leyenda olfativa única con cuero suave, violeta y acorde amaderado ahumado.",
-    descripcionLarga: "Una firma audaz y atemporal que juega con los contrastes del frío y el fuego. Fusión inolvidable de flor de violeta y cuero.",
-    imagen: "https://images.unsplash.com/photo-1506812574058-fc75fa93fead?auto=format&fit=crop&q=80&w=600",
-    stock: 7,
+    descripcion: "Opulenta mezcla real con lavanda balsámica, cacao, vainilla y maderas dulces.",
+    descripcionLarga: "Una fragancia majestuosa que combina la calidez de la vainilla y el cacao con toques herbales de lavanda y un elegante fondo amaderado.",
+    imagen: "public/images/The-Kingdom-for-Men-Eau-De-Parfum-100ml-Lattafa-Lattafa-32060017.webp",
+    stock: 17,
     notas: {
-      salida: "Flor de Múscat, Lavanda, Cedro, Manzanilla y Hawthorn",
-      corazon: "Hojas de Violeta, Nuez Moscada, Cedro y Sándalo",
-      fondo: "Cuero, Vetiver, Almizcle y Ámbar"
+      salida: "Salvia, Lavanda y Pimienta rosa",
+      corazon: "Vainilla, Cacao y Cardamomo",
+      fondo: "Haba Tonka, Ámbar dorado y Madera de Cedro"
     }
   },
 
-  // --- CHANEL ---
+  
   {
     id: 21,
     nombre: "Bleu de Chanel EDP",
@@ -438,28 +449,27 @@ export const productosIniciales = [
   },
   {
     id: 22,
-    nombre: "Chanel Allure Homme Sport Eau Extrême",
-    marca: "Chanel",
-    precio: 124990,
-    categoria: "Frescos",
-    acordes: ['aromático', 'fresco especiado', 'cítrico', 'amaderado', 'dulce', 'verde'],
+    nombre: "Liquid Brun",
+    marca: "French Avenue",
+    precio: 30990,
+    categoria: "Gourmand",
+    acordes: ['cálido especiado', 'canela', 'vainilla', 'dulce', 'amaderado', 'licoroso', 'ron'],
     tamanos: [
-      { ml: '75 ml', precio: 104990, stock: 2 },
-      { ml: '100 ml', precio: 124990, stock: 4 },
-      { ml: '125 ml', precio: 142990, stock: 2 }
+      { ml: '50 ml', precio: 32990, stock: 4 },
+      { ml: '100 ml', precio: 30990, stock: 12 }
     ],
-    descripcion: "Fragancia de alta adrenalina con mandarina siciliana, ciprés y tonka sensual.",
-    descripcionLarga: "Para el hombre que busca sensaciones extremas. Combina notas efervescentes con un fondo almizclado intenso.",
-    imagen: "https://images.unsplash.com/photo-1563178406-4cdc2923acbc?auto=format&fit=crop&q=80&w=600",
-    stock: 8,
+    descripcion: "Adictiva y cálida mezcla de canela especiada, bourbon vainilla, praliné y madera de guayaco.",
+    descripcionLarga: "Una de las fragancias gourmet más aclamadas de la perfumería boutique. Combina notas licorosas de ron con una canela envolvente y un fondo cremoso de vainilla.",
+    imagen: "public/images/liqui_burn.jpg",
+    stock: 16,
     notas: {
-      salida: "Mandarina, Mint, Ciprés y Salvia",
-      corazon: "Pimienta picante",
-      fondo: "Haba Tonka, Almizcle, Cedro y Sándalo"
+      salida: "Canela, Cardamomo, Flor de Naranjo y Bergamota",
+      corazon: "Bourbon Vainilla y Resina de Elemi",
+      fondo: "Praliné, Ambrosan, Almizcle y Madera de Guayaco"
     }
   },
 
-  // --- YVES SAINT LAURENT ---
+  
   {
     id: 23,
     nombre: "YSL Y Eau de Parfum",
@@ -504,98 +514,114 @@ export const productosIniciales = [
     }
   },
 
-  // --- GUERLAIN ---
+  
   {
     id: 25,
-    nombre: "Guerlain L'Homme Idéal EDP",
-    marca: "Guerlain",
-    precio: 112990,
-    categoria: "Gourmand",
-    acordes: ['dulce', 'almendra', 'cuero', 'cálido especiado', 'afrutado', 'amaderado'],
-    descripcion: "Sensual fragancia con almendra amarga, cuero elegante y vainilla de Madagascar.",
-    descripcionLarga: "El hombre ideal es un mito, pero su perfume es una realidad. Mezcla de almendra cautivadora con especias cálidas.",
-    imagen: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=600",
-    stock: 9,
+    nombre: "Lattafa Asad Bourbon",
+    marca: "Lattafa",
+    precio: 25990,
+    categoria: "Orientales",
+    acordes: ['cálido especiado', 'ron', 'vainilla', 'ámbar', 'amaderado', 'dulce'],
+    tamanos: [
+      { ml: '50 ml', precio: 21990, stock: 3 },
+      { ml: '100 ml', precio: 25990, stock: 10 }
+    ],
+    descripcion: "Evolución opulenta del clásico Asad con rico concentrado de ron bourbon, ciruela y cacao.",
+    descripcionLarga: "Sensualidad oscura y envolvente. Eleva la firma especiada con un toque borbonico, cacao amargo y resinas que garantizan máxima durabilidad.",
+    imagen: "public/images/asad_bourbo.jpg",
+    stock: 13,
     notas: {
-      salida: "Almendra, Especias, Lavanda y Bergamota",
-      corazon: "Cereza, Vainilla, Incienso y Rosa",
-      fondo: "Cuero, Habba Tonka y Sándalo"
+      salida: "Ciruela madura, Pimienta negra y Lavanda",
+      corazon: "Bourbon Vainilla, Ron y Cacao",
+      fondo: "Ámbar dorado, Cuero y Madera de Cedro"
     }
   },
   {
     id: 26,
-    nombre: "Guerlain Aqua Allegoria Mandarine Basilic",
-    marca: "Guerlain",
-    precio: 98990,
-    categoria: "Cítricos",
-    acordes: ['cítrico', 'fresco especiado', 'herbal', 'verde', 'fresco'],
-    descripcion: "Refrescante destello de mandarina jugosa combinada con albahaca fresca.",
-    descripcionLarga: "Un perfume chispeante e iluminado por el sol. Celebra la jugosidad cítrica de la mandarina con finas notas herbales.",
-    imagen: "https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&q=80&w=600",
-    stock: 11,
+    nombre: "Lattafa Fakhar Black",
+    marca: "Lattafa",
+    precio: 32990,
+    categoria: "Frescos",
+    acordes: ['aromático', 'fresco', 'afrutado', 'fresco especiado', 'amaderado', 'verde'],
+    tamanos: [
+      { ml: '50 ml', precio: 23990, stock: 5 },
+      { ml: '100 ml', precio: 32990, stock: 18 }
+    ],
+    descripcion: "Chispeante y versátil aroma de manzana verde, lavanda, jengibre y maderas ambaradas.",
+    descripcionLarga: "La fragancia definitiva para el día a día. Combina la frescura jugosa de la manzana con la elegancia de la lavanda y un fondo masculino de ambroxan.",
+    imagen: "public/images/fhackar_black.webp",
+    stock: 23,
     notas: {
-      salida: "Clementina, Naranjo amargo, Flor de Azahar y Té Verde",
-      corazon: "Mandarina, Albahaca, Manzanilla y Peonía",
-      fondo: "Sándalo y Ámbar"
+      salida: "Manzana verde, Bergamota y Jengibre",
+      corazon: "Lavanda, Salvia, Bayas de Enebro y Geranio",
+      fondo: "Haba Tonka, Ámbar, Cedro y Vetiver"
     }
   },
 
-  // --- CALVIN KLEIN ---
+
   {
     id: 27,
-    nombre: "Calvin Klein CK One EDT",
-    marca: "Calvin Klein",
-    precio: 39990,
+    nombre: "Afnan Turathi Blue",
+    marca: "Afnan",
+    precio: 38990,
     categoria: "Cítricos",
-    acordes: ['cítrico', 'verde', 'fresco', 'blanco floral', 'aromático'],
-    descripcion: "La icónica fragancia unisex ultra fresca con té verde, piña y almizcle.",
-    descripcionLarga: "Un clásico universal que transmite pureza y libertad. Perfecto para el uso diario y para compartir en pareja.",
-    imagen: "https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&q=80&w=600",
-    stock: 35,
+    acordes: ['cítrico', 'ámbar', 'fresco', 'amaderado', 'fresco especiado', 'aromático'],
+    tamanos: [
+      { ml: '50 ml', precio: 28990, stock: 4 },
+      { ml: '100 ml', precio: 38990, stock: 14 }
+    ],
+    descripcion: "Elegante explosión cítrica de bergamota azul, ámbar cálido y almizcle terroso.",
+    descripcionLarga: "Un referente de frescura refinada. Destaca por su apertura cítrica chispeante que evoluciona hacia un ámbar limpio y amaderado altamente elogiado.",
+    imagen: "public/images/turathi_blue.webp",
+    stock: 18,
     notas: {
-      salida: "Limón, Notas Verdes, Bergamota, Piña y Mandarina",
-      corazon: "Lirio de los Valles, Jazmín, Violeta y Nuez Moscada",
-      fondo: "Acorde Verde, Almizcle, Cedro, Sándalo y Ámbar"
+      salida: "Bergamota de Calabria y Cítricos italianos",
+      corazon: "Ámbar mineral y Notas Amaderadas",
+      fondo: "Almizcle blanco, Pachulí y Especias suaves"
     }
   },
   {
     id: 28,
-    nombre: "Calvin Klein Eternity for Men",
-    marca: "Calvin Klein",
-    precio: 45990,
-    categoria: "Frescos",
-    acordes: ['aromático', 'fresco especiado', 'cítrico', 'amaderado', 'herbal'],
-    descripcion: "Aroma fougère intemporal con lavanda, salvia, geranio y sándalo.",
-    descripcionLarga: "Una expresión de amor eterno y espíritu familiar. Combina acordes florales masculinos con madera cálida.",
-    imagen: "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600",
-    stock: 20,
+   nombre: "Maison Alhambra Jean Lowe Vibe",
+    marca: "Maison Alhambra",
+    precio: 36990,
+    categoria: "Cítricos",
+    acordes: ['cítrico', 'fresco', 'afrutado', 'aromático', 'blanco floral', 'amaderado'],
+    tamanos: [
+      { ml: '50 ml', precio: 26990, stock: 3 },
+      { ml: '100 ml', precio: 36990, stock: 12 }
+    ],
+    descripcion: "Vibrante acorde de toronja fresca, jengibre picante, romero y ambroxan marino.",
+    descripcionLarga: "Energía pura y sofisticación. Diseñada para destacar en climas cálidos con una ráfaga Cítrica-Especiada de alta proyección.",
+    imagen: "public/images/jean_lowe.webp",
+    stock: 15,
     notas: {
-      salida: "Lavanda, Limón, Bergamota y Salvia",
-      corazon: "Baya de Enebro, Salvia, Cilantro, Geranio y Azahar",
-      fondo: "Sándalo, Vetiver, Palo de Rosa de Brasil y Ámbar"
+      salida: "Toronja rosada, Jengibre fresco y Bergamota",
+      corazon: "Romero, Salvia silvestre y Geranio",
+      fondo: "Ambroxan, Ámbar cristalino y Maderas rubias"
     }
   },
 
-  // --- OTRAS MARCAS VIRALES ---
+ 
   {
     id: 29,
-    nombre: "Club de Nuit Intense Man Limited Edition",
-    marca: "Armaf",
-    precio: 59990,
-    categoria: "Cítricos",
-    acordes: ['cítrico', 'afrutado', 'amaderado', 'ahumado', 'cuero', 'fresco'],
+    nombre: "Atlantis Extrait",
+    marca: "French Avenue",
+    precio: 48990,
+    categoria: "Frescos",
+    acordes: ['marino', 'fresco', 'cítrico', 'aromático', 'amaderado'],
     tamanos: [
-      { ml: '100 ml', precio: 59990, stock: 18 },
-      { ml: '150 ml', precio: 79990, stock: 6 }
+      { ml: '50 ml', precio: 35990, stock: 4 },
+      { ml: '100 ml', precio: 48990, stock: 11 }
     ],
-    descripcion: "Potente acorde de piña ahumada, abedul y bergamota de proyección gigante.",
-    descripcionLarga: "El rey indiscutido de los perfumes cumplidores. Un aroma amaderado especiado con notas cítricas y fondo ahumado.",
-    imagen: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=600",
-    stock: 24,
+    descripcion: "Exclusivo extracto marino e intensamente fresco con cítricos mediterráneos y ámbar gris.",
+    descripcionLarga: "Una interpretación de lujo de la frescura oceánica. Atlantis Extrait ofrece una concentración impecable con brisa marina, bergamota chispeante y un fondo profundo de ámbar gris.",
+    imagen: "public/images/atlantis_extrait.webp",
+    stock: 15,
     notas: {
-      salida: "Piña, Limón, Lima, Bergamota y Pimienta Negra",
-      corazon: "Abedul, Jazmín y Rosa",
-      fondo: "Almizcle Blanco, Ámbar Gris, Pachulí y Vainilla"
+      salida: "Bergamota de Calabria, Cítricos marinos y Pimienta rosa",
+      corazon: "Notas oceánicas, Salvia silvestre y Lavanda",
+      fondo: "Ámbar gris, Almizcle blanco y Madera de Guayaco"
     }
   },
   {
@@ -662,36 +688,44 @@ export const productosIniciales = [
   },
   {
     id: 33,
-    nombre: "Parfums de Marly Layton",
-    marca: "Parfums de Marly",
-    precio: 189990,
-    categoria: "Orientales",
-    acordes: ['cálido especiado', 'vainilla', 'amaderado', 'afrutado', 'lavanda', 'fresco'],
-    descripcion: "Alta perfumería francesa con manzana acaramelada, lavanda noble y vainilla.",
-    descripcionLarga: "Elegancia aristocrática en estado puro. Un perfume oriental seductor que destaca por su opulencia y refinamiento.",
-    imagen: "https://images.unsplash.com/photo-1583445013765-46c20c4a6772?auto=format&fit=crop&q=80&w=600",
-    stock: 5,
+    nombre: "Lattafa Teriaq Intense",
+    marca: "Lattafa",
+    precio: 42990,
+    categoria: "Gourmand",
+    acordes: ['dulce', 'cálido especiado', 'licoroso', 'ron', 'vainilla', 'ámbar'],
+    tamanos: [
+      { ml: '50 ml', precio: 31990, stock: 3 },
+      { ml: '100 ml', precio: 42990, stock: 12 }
+    ],
+    descripcion: "Intensa y opulenta poción licorosa de ron, canela, cuero suave y miel de vainilla.",
+    descripcionLarga: "Una propuesta gourmand de nivel nicho. Teriaq Intense eleva la sensualidad con acordes borbónicos, especias ardientes y una dulzura cremosa de ámbar y vainilla.",
+    imagen: "public/images/Lattafa-Teriaq-Intense-Perfume-Lattafa-Teriaq-Intense-Decant-5-8ML.webp",
+    stock: 15,
     notas: {
-      salida: "Manzana, Lavanda, Bergamota y Mandarina",
-      corazon: "Jazmín, Violeta y Geranio",
-      fondo: "Vainilla, Cardamomo, Sándalo, Pimienta y Pachulí"
+      salida: "Ron añejo, Canela en rama y Bergamota",
+      corazon: "Miel dorada, Cuero fino y Ciruela madura",
+      fondo: "Vainilla Bourbon, Ámbar denso y Haba Tonka"
     }
   },
   {
     id: 34,
-    nombre: "Club de Nuit Untold",
-    marca: "Armaf",
-    precio: 58990,
-    categoria: "Orientales",
-    acordes: ['ámbar', 'cálido especiado', 'amaderado', 'dulce', 'blanco floral'],
-    descripcion: "Aroma ambarado y azucarado con azafrán, madera de ámbar y jazmín cristalino.",
-    descripcionLarga: "Inspirado en los aromas ambarados más lujosos del mundo. Una estela de azafrán y resinas que dura días en la ropa.",
-    imagen: "https://images.unsplash.com/photo-1563178406-4cdc2923acbc?auto=format&fit=crop&q=80&w=600",
-    stock: 17,
+   nombre: "Lattafa Art of Universe",
+    marca: "Lattafa",
+    precio: 39990,
+    categoria: "Amaderados",
+    acordes: ['amaderado', 'cálido especiado', 'ámbar', 'aromático', 'fresco especiado'],
+    tamanos: [
+      { ml: '50 ml', precio: 29990, stock: 4 },
+      { ml: '100 ml', precio: 39990, stock: 10 }
+    ],
+    descripcion: "Mística mezcla cósmica con maderas nobles, cardamomo, iris y resinas doradas.",
+    descripcionLarga: "Parte de la colección artística de Lattafa. Combina la calidez del cardamomo y la elegancia del iris sobre una base amaderada y ambarada altamente envolvente.",
+    imagen: "public/images/Lattafa-Art-Of-Universe-EDP.jpg",
+    stock: 14,
     notas: {
-      salida: "Azafrán y Jazmín",
-      corazon: "Amberwood y Ámbar Gris",
-      fondo: "Resina de Abeto y Cedro"
+      salida: "Cardamomo, Bergamota y Pimienta negra",
+      corazon: "Iris mantecoso, Incienso y Salvia",
+      fondo: "Sándalo cremoso, Ámbar mineral y Cedro del Atlas"
     }
   },
   {
@@ -713,23 +747,23 @@ export const productosIniciales = [
   },
   {
     id: 36,
-    nombre: "Viktor&Rolf Spicebomb Extreme",
-    marca: "Viktor&Rolf",
-    precio: 104990,
-    categoria: "Orientales",
-    acordes: ['cálido especiado', 'tabaco', 'vainilla', 'dulce', 'amaderado', 'aromático'],
+    nombre: "Armaf Odyssey Aqua",
+    marca: "Armaf",
+    precio: 34990,
+    categoria: "Frescos",
+    acordes: ['fresco', 'cítrico', 'acuático', 'aromático', 'amaderado'],
     tamanos: [
-      { ml: '50 ml', precio: 82990, stock: 3 },
-      { ml: '100 ml', precio: 104990, stock: 6 }
+      { ml: '50 ml', precio: 24990, stock: 5 },
+      { ml: '100 ml', precio: 34990, stock: 15 }
     ],
-    descripcion: "Explosión especiada de tabaco rubio, pimienta negra, comino y vainilla bourbon.",
-    descripcionLarga: "Una bomba olfativa de seducción para el invierno. Su frasco en forma de granada encierra una estela cálida e inolvidable.",
-    imagen: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&q=80&w=600",
-    stock: 9,
+    descripcion: "Refrescante brisa acuática con toronja chispeante, pimienta rosa y menta mentolada.",
+    descripcionLarga: "Elegancia vital para climas cálidos. Fusiona acordes marinos vigorizantes con toques mentolados y un fondo amaderado limpio de gran fijación.",
+    imagen: "public/images/Armaf-Odyssey-Aqua-2.jpg",
+    stock: 20,
     notas: {
-      salida: "Pimienta negra, Alcaravea y Lavanda",
-      corazon: "Tabaco rico y Canela",
-      fondo: "Vainilla de Borbón y Notas de Ámbar"
+      salida: "Toronja rosada, Naranja sanguina y Menta fresca",
+      corazon: "Notas acuáticas, Pimienta rosa y Lavanda",
+      fondo: "Ambroxan, Madera de Cedro y Musgo de roble"
     }
   }
 ];

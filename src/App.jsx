@@ -19,11 +19,11 @@ import { NotFound } from './pages/NotFound';
 
 export default function App() {
   const [productos, setProductos] = useState(() => {
-    const guardados = localStorage.getItem('aroma_productos_v14');
+    const guardados = localStorage.getItem('aroma_productos_v17');
     if (guardados) {
       try {
         const parsed = JSON.parse(guardados);
-        // 🧹 Limpia automáticamente cualquier producto con precio negativo o igual a 0 almacenado antes
+    
         return parsed.filter(p => Number(p.precio) > 0);
       } catch (e) {
         return productosIniciales;
@@ -51,7 +51,7 @@ export default function App() {
   const [mensajeToast, setMensajeToast] = useState('');
 
   useEffect(() => {
-    localStorage.setItem('aroma_productos_v14', JSON.stringify(productos));
+    localStorage.setItem('aroma_productos_v17', JSON.stringify(productos));
   }, [productos]);
 
   useEffect(() => {
@@ -119,7 +119,7 @@ export default function App() {
 
   const vaciarCarrito = () => setCarrito([]);
 
-  // 🛡️ ESCUDO DE SEGURIDAD GLOBAL: Rechaza cualquier precio <= 0 o inválido
+  
   const agregarProducto = (nuevoProducto) => {
     const precioNumerico = Number(nuevoProducto.precio);
 

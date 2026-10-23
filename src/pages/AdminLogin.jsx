@@ -7,7 +7,7 @@ export function AdminLogin({ onLoginAdmin }) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Lista de trabajadores autorizados por defecto
+
   const trabajadoresAutorizados = [
     { nombre: 'Administrador Principal', email: 'admin@aroma.cl', password: 'admin123', rol: 'admin' },
     { nombre: 'Operador Tienda', email: 'trabajador@aroma.cl', password: 'staff123', rol: 'trabajador' }
@@ -22,7 +22,7 @@ export function AdminLogin({ onLoginAdmin }) {
       return;
     }
 
-    // Buscar en la lista de trabajadores autorizados
+    
     const empleadoEncontrado = trabajadoresAutorizados.find(
       (t) => t.email.toLowerCase() === email.toLowerCase() && t.password === password
     );

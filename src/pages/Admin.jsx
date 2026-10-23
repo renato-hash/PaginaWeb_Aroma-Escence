@@ -10,7 +10,7 @@ export function Admin({ productos, agregarProducto, eliminarProducto }) {
     stock: 10 
   });
 
-  // 🛡️ Filtro en tiempo real: elimina guiones, letras y caracteres especiales al instante
+
   const handlePrecioChange = (e) => {
     const soloDigitosPositivos = e.target.value.replace(/[^0-9]/g, '');
     setForm({ ...form, precio: soloDigitosPositivos });
@@ -19,7 +19,7 @@ export function Admin({ productos, agregarProducto, eliminarProducto }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Forzamos el valor absoluto positivo
+
     const precioNum = Math.abs(Number(form.precio));
 
     if (!form.nombre.trim()) {
@@ -38,7 +38,7 @@ export function Admin({ productos, agregarProducto, eliminarProducto }) {
       precio: precioNum 
     });
 
-    // Limpiar formulario
+
     setForm({ 
       nombre: '', 
       precio: '', 
@@ -65,7 +65,7 @@ export function Admin({ productos, agregarProducto, eliminarProducto }) {
                 required 
               />
               
-              {/* Campo con restricción estricta contra el signo menos '-' */}
+
               <input 
                 className="form-control mb-2" 
                 type="text" 

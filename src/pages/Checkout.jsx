@@ -19,7 +19,7 @@ export function Checkout({ carrito, vaciarCarrito, usuario }) {
     comuna: ''
   });
 
-  const [metodoPago, setMetodoPago] = useState('tarjeta'); // 'tarjeta' | 'transferencia' | 'mercadopago'
+  const [metodoPago, setMetodoPago] = useState('tarjeta'); 
 
   const [cardData, setCardData] = useState({
     numeroTarjeta: '',
@@ -40,13 +40,12 @@ export function Checkout({ carrito, vaciarCarrito, usuario }) {
   const handleCardChange = (e) => {
     let { name, value } = e.target;
 
-    // Formato simple para Número de Tarjeta (máximo 16 dígitos)
     if (name === 'numeroTarjeta') {
       value = value.replace(/\D/g, '').slice(0, 16);
       value = value.replace(/(\d{4})/g, '$1 ').trim();
     }
 
-    // Formato para Vencimiento (MM/AA)
+    
     if (name === 'vencimiento') {
       value = value.replace(/\D/g, '').slice(0, 4);
       if (value.length >= 3) {
@@ -54,7 +53,7 @@ export function Checkout({ carrito, vaciarCarrito, usuario }) {
       }
     }
 
-    // Formato CVV (máximo 4 dígitos)
+
     if (name === 'cvv') {
       value = value.replace(/\D/g, '').slice(0, 4);
     }

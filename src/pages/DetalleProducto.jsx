@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-// 🎨 Mapa de colores para los Acordes Principales
+
 const COLORES_ACORDES = {
   'cálido especiado': { bg: '#d02c00', text: '#ffffff' },
   'fresco especiado': { bg: '#83b82a', text: '#ffffff' },
@@ -44,10 +44,10 @@ export function DetalleProducto({ productos, agregarAlCarrito }) {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Limpia el ID en caso de venir con sufijos de oferta
-  const idLimpio = String(id).split('-')[0];
-  const producto = productos.find((p) => String(p.id) === idLimpio);
 
+ const producto = productos.find((p) => 
+  String(p.id) === String(id) || String(id).startsWith(`${p.id}-`)
+);
   const [tamanoSeleccionado, setTamanoSeleccionado] = useState(null);
 
   useEffect(() => {
@@ -73,14 +73,14 @@ export function DetalleProducto({ productos, agregarAlCarrito }) {
     );
   }
 
-  // Detecta si es un producto promocional (ID <= 6)
+
   const esOferta = Number(producto.id) <= 6;
 
   const acordesLista = producto.acordes || ['fresco', 'amaderado', 'aromático'];
 
   const precioBase = tamanoSeleccionado ? tamanoSeleccionado.precio : producto.precio;
   
-  // 🎯 Redondeo comercial terminado en 90 para ofertas
+
   const precioFinal = esOferta ? (Math.floor((precioBase * 0.80) / 100) * 100 + 90) : precioBase;
   const stockActual = tamanoSeleccionado ? tamanoSeleccionado.stock : (producto.stock || 10);
 
@@ -103,8 +103,7 @@ export function DetalleProducto({ productos, agregarAlCarrito }) {
   return (
     <div className="container my-5">
       <div className="card shadow-lg p-4 p-md-5 border-0 rounded-4 bg-white position-relative">
-        
-        {/* Badge 20% OFF */}
+
         {esOferta && (
           <span 
             className="position-absolute top-0 end-0 bg-danger text-white fw-bold px-3 py-2 rounded-start mt-4 shadow-sm" 
@@ -114,7 +113,7 @@ export function DetalleProducto({ productos, agregarAlCarrito }) {
           </span>
         )}
 
-        {/* Botón Volver totalmente activo en todo el recuadro */}
+
         <div className="mb-4 d-flex justify-content-start">
           <button 
             type="button"
@@ -133,7 +132,7 @@ export function DetalleProducto({ productos, agregarAlCarrito }) {
 
         <div className="row g-5 align-items-center">
           
-          {/* Imagen del Perfume */}
+  
           <div className="col-12 col-md-5 text-center">
             <img
               src={producto.imagen}
@@ -141,12 +140,12 @@ export function DetalleProducto({ productos, agregarAlCarrito }) {
               className="img-fluid rounded-4 p-2"
               style={{ maxHeight: '480px', objectFit: 'contain' }}
               onError={(e) => {
-                e.target.src = 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600';
+                e.target.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyOLUnP_BwhZdu4mFK-HJnYiKNm8DXXhp-zn0JRknOg7XJwb4Nan12v_Y&s=10';
               }}
             />
           </div>
 
-          {/* Información y Variaciones */}
+
           <div className="col-12 col-md-7">
             
             <div className="text-center text-md-start mb-3">
@@ -161,7 +160,7 @@ export function DetalleProducto({ productos, agregarAlCarrito }) {
               </small>
             </div>
 
-            {/* Acordes Principales */}
+
             <div className="my-4">
               <p className="text-muted text-center text-md-start small mb-3 fw-semibold">
                 acordes principales
@@ -196,7 +195,7 @@ export function DetalleProducto({ productos, agregarAlCarrito }) {
 
             <h2 className="fw-bold mb-2 text-dark">{producto.nombre}</h2>
             
-            {/* Visualización de Precios */}
+      
             <div className="mb-3">
               {esOferta ? (
                 <div className="d-flex align-items-center gap-2">
@@ -214,7 +213,7 @@ export function DetalleProducto({ productos, agregarAlCarrito }) {
               )}
             </div>
 
-            {/* Selector de Tamaño */}
+        
             {producto.tamanos && producto.tamanos.length > 0 && (
               <div className="mb-4">
                 <label className="form-label fw-bold text-dark mb-1">Tamaño</label>
@@ -240,7 +239,7 @@ export function DetalleProducto({ productos, agregarAlCarrito }) {
               {producto.descripcionLarga || producto.descripcion}
             </p>
 
-            {/* Pirámide Olfativa */}
+       
             {producto.notas && (
               <div className="card bg-light border-0 rounded-4 p-3 mb-4">
                 <h6 className="fw-bold text-dark mb-2">Pirámide Olfativa</h6>

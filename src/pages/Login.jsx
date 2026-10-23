@@ -36,7 +36,7 @@ export function Login({ onLogin }) {
       onLogin({ nombre: nuevoUsuario.nombre, email: nuevoUsuario.email, rol: 'cliente' });
       navigate('/');
     } else {
-      // Iniciar sesión
+
       const usuarioEncontrado = usuariosGuardados.find(
         (u) => u.email === email && u.password === password
       );
