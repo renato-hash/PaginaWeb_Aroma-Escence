@@ -6,9 +6,12 @@ function VideoPromocional() {
   const youtubeVideoId = 'SY-6WZ8fgVg';
 
   return (
-    <div className="card shadow-sm border-0 rounded-4 overflow-hidden p-3 bg-white h-100 d-flex flex-column justify-content-center">
+    <article className="card shadow-sm border-0 rounded-4 overflow-hidden p-3 bg-white h-100 d-flex flex-column justify-content-center">
       <h5 className="fw-bold text-dark text-center mb-1">Conoce Nuestra Perfumería</h5>
-      <p className="text-muted small text-center mb-3">Descubre Le Beau Le Parfum de Jean Paul Gaultier, un Eau de Parfum masculino que encarna la seducción y el magnetismo.</p>
+      <p className="text-muted small text-center mb-3">
+        Descubre Le Beau Le Parfum de Jean Paul Gaultier, un Eau de Parfum masculino que encarna
+        la seducción y el magnetismo.
+      </p>
 
       <div className="ratio ratio-16x9 rounded-3 overflow-hidden shadow-sm">
         <iframe
@@ -18,29 +21,32 @@ function VideoPromocional() {
           allowFullScreen
         ></iframe>
       </div>
-    </div>
+    </article>
   );
 }
 
-export function Catalogo({ productos, agregarAlCarrito }) {
+export function Catalogo({ productos = [], agregarAlCarrito }) {
   const slides = [
     {
       id: 1,
-      titulo: "Bienvenido a Aroma & Esencia",
-      subtitulo: "Descubre nuestra exclusiva colección de perfumería boutique de alta gama.",
-      imagen: "/images/bluechanel.jpg"
+      titulo: 'Bienvenido a Aroma & Esencia',
+      subtitulo: 'Descubre nuestra exclusiva colección de perfumería boutique de alta gama.',
+      imagen: '/images/bluechanel.jpg'
     },
     {
       id: 2,
-      titulo: "Fragancias Exclusivas",
-      subtitulo: "Explora nuestras familias olfativas: Florales, Amaderados, Cítricos, Orientales y más.",
-      imagen: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1200&h=600&q=80"
+      titulo: 'Fragancias Exclusivas',
+      subtitulo:
+        'Explora nuestras familias olfativas: Florales, Amaderados, Cítricos, Orientales y más.',
+      imagen:
+        'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1200&h=600&q=80'
     },
     {
       id: 3,
-      titulo: "Envíos a Todo Chile",
-      subtitulo: "Elige la esencia que define tu estilo y recíbela directo en tu hogar.",
-      imagen: "https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&q=80&w=1200"
+      titulo: 'Envíos a Todo Chile',
+      subtitulo: 'Elige la esencia que define tu estilo y recíbela directo en tu hogar.',
+      imagen:
+        'https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&q=80&w=1200'
     }
   ];
 
@@ -64,11 +70,11 @@ export function Catalogo({ productos, agregarAlCarrito }) {
   const productosOferta = productos.slice(0, 3);
 
   const fotosVirales = [
-    "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=600",
-    "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=600",
-    "https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&q=80&w=600",
-    "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600",
-    "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=600"
+    'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=600'
   ];
 
   const productosVirales = productos.slice(0, 5).map((prod, index) => ({
@@ -79,44 +85,54 @@ export function Catalogo({ productos, agregarAlCarrito }) {
   const testimonios = [
     {
       id: 1,
-      nombre: "Camila Valenzuela",
-      ciudad: "Santiago",
-      comentario: "Excelente servicio. La fragancia es 100% original y el empaque llegó impecable en menos de 24 horas.",
-      calificacion: "5.0 / 5.0",
-      producto: "Le Beau Le Parfum"
+      nombre: 'Camila Valenzuela',
+      ciudad: 'Santiago',
+      comentario:
+        'Excelente servicio. La fragancia es 100% original y el empaque llegó impecable en menos de 24 horas.',
+      calificacion: '5.0 / 5.0',
+      producto: 'Le Beau Le Parfum'
     },
     {
       id: 2,
-      nombre: "Matías Silva",
-      ciudad: "Viña del Mar",
-      comentario: "Muy satisfecho con mi compra. La fijación del perfume es increíble y la atención al cliente de primer nivel.",
-      calificacion: "5.0 / 5.0",
-      producto: "Bleu de Chanel"
+      nombre: 'Matías Silva',
+      ciudad: 'Viña del Mar',
+      comentario:
+        'Muy satisfecho con mi compra. La fijación del perfume es increíble y la atención al cliente de primer nivel.',
+      calificacion: '5.0 / 5.0',
+      producto: 'Bleu de Chanel'
     },
     {
       id: 3,
-      nombre: "Valentina Reyes",
-      ciudad: "Concepción",
-      comentario: "Buscaba una fragancia exclusiva y me asesoraron perfectamente. Sin duda volveré a comprar en Aroma & Esencia.",
-      calificacion: "5.0 / 5.0",
-      producto: "Baccarat Rouge 540"
+      nombre: 'Valentina Reyes',
+      ciudad: 'Concepción',
+      comentario:
+        'Buscaba una fragancia exclusiva y me asesoraron perfectamente. Sin duda volveré a comprar en Aroma & Esencia.',
+      calificacion: '5.0 / 5.0',
+      producto: 'Baccarat Rouge 540'
     }
   ];
 
+  const obtenerStockProducto = (prod) => {
+    if (Array.isArray(prod.tamanos) && prod.tamanos.length > 0) {
+      return Number(prod.tamanos[0].stock ?? 0);
+    }
+    return Number(prod.stock ?? 0);
+  };
+
   return (
-    <div className="container my-4">
-   
-      <div className="row g-4 mb-5 align-items-stretch">
+    <main className="container my-4">
+      {/* HERO: VIDEO + CARRUSEL */}
+      <section aria-label="Destacados principales" className="row g-4 mb-5 align-items-stretch">
         <div className="col-12 col-lg-5">
           <VideoPromocional />
         </div>
 
         <div className="col-12 col-lg-7">
-          <div 
+          <div
             className="position-relative overflow-hidden rounded-4 shadow-lg h-100"
             style={{ minHeight: '320px' }}
           >
-            <div 
+            <div
               style={{
                 backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${slides[slideActual].imagen})`,
                 backgroundSize: 'cover',
@@ -128,32 +144,46 @@ export function Catalogo({ productos, agregarAlCarrito }) {
             >
               <h1 className="fw-bold display-6 mb-2">{slides[slideActual].titulo}</h1>
               <p className="lead fs-6 mb-3">{slides[slideActual].subtitulo}</p>
-              <Link to="/categorias" className="btn btn-warning text-dark fw-bold rounded-pill px-4 py-2">
+              <Link
+                to="/categorias"
+                className="btn btn-warning text-dark fw-bold rounded-pill px-4 py-2"
+              >
                 Ver Familias Olfativas
               </Link>
             </div>
 
             <button
+              type="button"
+              aria-label="Diapositiva anterior"
               className="btn btn-dark btn-sm rounded-circle position-absolute top-50 start-0 translate-middle-y ms-2 opacity-75"
               onClick={anteriorSlide}
               style={{ width: '38px', height: '38px', zIndex: 10 }}
             >
-              ❮
+              <i className="fa-solid fa-chevron-left" aria-hidden="true"></i>
             </button>
 
             <button
+              type="button"
+              aria-label="Diapositiva siguiente"
               className="btn btn-dark btn-sm rounded-circle position-absolute top-50 end-0 translate-middle-y me-2 opacity-75"
               onClick={siguienteSlide}
               style={{ width: '38px', height: '38px', zIndex: 10 }}
             >
-              ❯
+              <i className="fa-solid fa-chevron-right" aria-hidden="true"></i>
             </button>
 
-            <div className="position-absolute bottom-0 start-50 translate-middle-x mb-2 d-flex gap-2" style={{ zIndex: 10 }}>
+            <div
+              className="position-absolute bottom-0 start-50 translate-middle-x mb-2 d-flex gap-2"
+              style={{ zIndex: 10 }}
+            >
               {slides.map((_, index) => (
                 <button
                   key={index}
-                  className={`btn p-0 rounded-circle ${index === slideActual ? 'bg-warning' : 'bg-white opacity-50'}`}
+                  type="button"
+                  aria-label={`Ir a diapositiva ${index + 1}`}
+                  className={`btn p-0 rounded-circle ${
+                    index === slideActual ? 'bg-warning' : 'bg-white opacity-50'
+                  }`}
                   style={{ width: '10px', height: '10px', border: 'none' }}
                   onClick={() => setSlideActual(index)}
                 />
@@ -161,16 +191,19 @@ export function Catalogo({ productos, agregarAlCarrito }) {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-  
-      <div 
+      {/* OFERTAS DESTACADAS */}
+      <section
+        aria-labelledby="titulo-ofertas-destacadas"
         className="p-4 rounded-4 border mb-5"
         style={{ backgroundColor: '#eaf4ed', borderColor: '#a3d9b1' }}
       >
         <div className="d-flex justify-content-between align-items-center mb-3">
           <div>
-            <h3 className="fw-bold text-dark m-0">Ofertas Destacadas</h3>
+            <h3 id="titulo-ofertas-destacadas" className="fw-bold text-dark m-0">
+              Ofertas Destacadas
+            </h3>
             <p className="text-muted small m-0">Descuentos exclusivos por tiempo limitado</p>
           </div>
           <Link to="/ofertas" className="btn btn-outline-success btn-sm rounded-pill fw-bold">
@@ -180,17 +213,22 @@ export function Catalogo({ productos, agregarAlCarrito }) {
 
         <div className="row g-4">
           {productosOferta.map((prod) => {
-            const precioBase = prod.tamanos ? prod.tamanos[0].precio : prod.precio;
-            
-    
-            const precioConDescuento = Math.floor((precioBase * 0.80) / 100) * 100 + 90;
+            const varianteBase =
+              Array.isArray(prod.tamanos) && prod.tamanos.length > 0 ? prod.tamanos[0] : null;
+            const precioBase = varianteBase ? Number(varianteBase.precio) : Number(prod.precio);
+            const stockDisponible = obtenerStockProducto(prod);
+            const precioConDescuento = Math.floor((precioBase * 0.8) / 100) * 100 + 90;
 
             const handleAgregarOfertaDestacada = () => {
+              if (stockDisponible <= 0) return;
               agregarAlCarrito({
                 ...prod,
-                id: `${prod.id}-destacado-oferta`,
-                nombre: prod.tamanos 
-                  ? `${prod.nombre} (${prod.tamanos[0].ml}) - 20% OFF` 
+                id: prod.id,
+                ml: varianteBase ? varianteBase.ml : null,
+                tamano: varianteBase ? varianteBase.ml : null,
+                stock: stockDisponible,
+                nombre: varianteBase
+                  ? `${prod.nombre} (${varianteBase.ml}) - 20% OFF`
                   : `${prod.nombre} - 20% OFF`,
                 precio: precioConDescuento,
                 precioOriginal: precioBase
@@ -199,171 +237,295 @@ export function Catalogo({ productos, agregarAlCarrito }) {
 
             return (
               <div key={`oferta-${prod.id}`} className="col-12 col-md-4">
-                <div className="card h-100 shadow-sm border-0 product-card position-relative bg-white rounded-4 overflow-hidden">
-                  <span className="position-absolute top-0 start-0 bg-danger text-white fw-bold px-3 py-1 rounded-end mt-2 shadow-sm" style={{ zIndex: 5 }}>
+                <article className="card h-100 shadow-sm border-0 product-card position-relative bg-white rounded-4 overflow-hidden">
+                  <span
+                    className="position-absolute top-0 start-0 bg-danger text-white fw-bold px-3 py-1 rounded-end mt-2 shadow-sm"
+                    style={{ zIndex: 5 }}
+                  >
                     20% OFF
                   </span>
-                  <img
-                    src={prod.imagen}
-                    className="card-img-top p-3"
-                    alt={prod.nombre}
-                    style={{ height: '200px', objectFit: 'contain' }}
-                    onError={(e) => {
-                      e.target.src = 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600';
-                    }}
-                  />
+                  <Link
+                    to={`/producto/${prod.id}`}
+                    className="text-decoration-none"
+                    aria-label={`Ver detalles de ${prod.nombre}`}
+                  >
+                    <img
+                      src={prod.imagen}
+                      className="card-img-top p-3"
+                      alt={prod.nombre}
+                      style={{ height: '200px', objectFit: 'contain' }}
+                      onError={(e) => {
+                        e.target.src =
+                          'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600';
+                      }}
+                    />
+                  </Link>
                   <div className="card-body d-flex flex-column p-3">
-                    <span className="badge bg-secondary mb-2 align-self-start">{prod.categoria || 'Perfumes'}</span>
-                    <h6 className="fw-bold mb-1">{prod.nombre}</h6>
-                    <p className="text-muted small flex-grow-1 mb-2 text-truncate">{prod.descripcion}</p>
-                    <div className="d-flex justify-content-between align-items-center pt-2 border-top">
-                      <div>
-                        <span className="text-muted text-decoration-line-through small me-2">
-                          ${precioBase.toLocaleString('es-CL')}
-                        </span>
-                        <span className="fw-bold text-danger fs-5">
-                          ${precioConDescuento.toLocaleString('es-CL')}
-                        </span>
-                      </div>
-                      <button className="btn btn-success btn-sm fw-bold rounded-pill" onClick={handleAgregarOfertaDestacada}>
-                        + Agregar
+                    <span className="badge bg-secondary mb-2 align-self-start">
+                      {prod.categoria || 'Perfumes'}
+                    </span>
+                    <h6 className="fw-bold mb-1">
+                      <Link
+                        to={`/producto/${prod.id}`}
+                        className="text-dark text-decoration-none"
+                      >
+                        {prod.nombre}
+                      </Link>
+                    </h6>
+                    <p className="text-muted small flex-grow-1 mb-2 text-truncate">
+                      {prod.descripcion}
+                    </p>
+
+                    <div className="mb-3 pt-2 border-top">
+                      <span className="text-muted text-decoration-line-through small me-2">
+                        ${precioBase.toLocaleString('es-CL')}
+                      </span>
+                      <span className="fw-bold text-danger fs-5">
+                        ${precioConDescuento.toLocaleString('es-CL')}
+                      </span>
+                    </div>
+
+                    <div className="d-grid gap-2">
+                      <Link
+                        to={`/producto/${prod.id}`}
+                        className="btn btn-outline-dark btn-sm rounded-pill fw-semibold"
+                      >
+                        <i className="fa-solid fa-eye me-1" aria-hidden="true"></i>
+                        Ver detalles
+                      </Link>
+                      <button
+                        type="button"
+                        className="btn btn-success btn-sm fw-bold rounded-pill"
+                        onClick={handleAgregarOfertaDestacada}
+                        disabled={stockDisponible <= 0}
+                      >
+                        <i className="fa-solid fa-cart-plus me-1" aria-hidden="true"></i>
+                        {stockDisponible <= 0 ? 'Agotado' : 'Agregar al carrito'}
                       </button>
                     </div>
                   </div>
-                </div>
+                </article>
               </div>
             );
           })}
         </div>
-      </div>
+      </section>
 
-   
-      <div className="mb-5">
-        <h3 className="fw-bold text-dark mb-3">Perfumes virales</h3>
-        <div className="row g-3 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5">
-          {productosVirales.map((prod) => (
-            <div key={`viral-${prod.id}`} className="col">
-              <div 
-                className="card border-0 shadow-sm rounded-4 overflow-hidden text-white position-relative d-flex flex-column justify-content-end"
-                style={{ height: '340px' }}
-              >
-                <img 
-                  src={prod.imagenFondo} 
-                  alt={prod.nombre} 
-                  className="position-absolute top-0 start-0 w-100 h-100" 
-                  style={{ objectFit: 'cover' }}
-                />
-                
-                <div 
-                  className="position-absolute top-0 start-0 w-100 h-100" 
-                  style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 65%, rgba(0,0,0,0) 100%)' }}
-                ></div>
+      {/* PERFUMES VIRALES */}
+      <section aria-labelledby="titulo-perfumes-virales" className="mb-5">
+        <h3 id="titulo-perfumes-virales" className="fw-bold text-dark mb-3">
+          Perfumes virales
+        </h3>
+        <div className="row g-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5">
+          {productosVirales.map((prod) => {
+            const stockDisponible = obtenerStockProducto(prod);
 
-                <div className="position-relative p-2 z-1">
-                  <div className="d-flex align-items-center gap-2 mb-2">
-                    <div className="bg-white p-1 rounded-3 shadow-sm flex-shrink-0" style={{ width: '40px', height: '40px' }}>
-                      <img 
-                        src={prod.imagen} 
-                        alt={prod.nombre} 
-                        className="w-100 h-100" 
-                        style={{ objectFit: 'contain' }}
-                        onError={(e) => {
-                          e.target.src = 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600';
-                        }}
-                      />
-                    </div>
-                    <div className="overflow-hidden">
-                      <div className="fw-semibold text-white text-truncate" style={{ fontSize: '0.75rem' }}>
-                        {prod.nombre}
-                      </div>
-                      <div className="fw-bold text-white" style={{ fontSize: '0.85rem' }}>
-                        ${prod.precio.toLocaleString('es-CL')}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <button 
-                  className="btn btn-dark w-100 rounded-0 py-2 px-3 d-flex justify-content-between align-items-center border-top border-secondary z-1"
-                  style={{ backgroundColor: '#000', fontSize: '0.8rem', fontWeight: '500' }}
-                  onClick={() => agregarAlCarrito(prod)}
+            return (
+              <div key={`viral-${prod.id}`} className="col">
+                <article
+                  className="card border-0 shadow-sm rounded-4 overflow-hidden text-white position-relative d-flex flex-column justify-content-end"
+                  style={{ height: '360px' }}
                 >
-                  <span>Agregar al Carrito</span>
-                  <span style={{ fontSize: '0.65rem' }}>▼</span>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+                  <img
+                    src={prod.imagenFondo}
+                    alt={prod.nombre}
+                    className="position-absolute top-0 start-0 w-100 h-100"
+                    style={{ objectFit: 'cover' }}
+                  />
 
- 
-      <div 
+                  <div
+                    className="position-absolute top-0 start-0 w-100 h-100"
+                    style={{
+                      background:
+                        'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.25) 65%, rgba(0,0,0,0) 100%)'
+                    }}
+                  ></div>
+
+                  <div className="position-relative p-2 z-1">
+                    <Link
+                      to={`/producto/${prod.id}`}
+                      className="d-flex align-items-center gap-2 mb-2 text-decoration-none text-white"
+                      aria-label={`Ver detalles de ${prod.nombre}`}
+                    >
+                      <div
+                        className="bg-white p-1 rounded-3 shadow-sm flex-shrink-0"
+                        style={{ width: '42px', height: '42px' }}
+                      >
+                        <img
+                          src={prod.imagen}
+                          alt={prod.nombre}
+                          className="w-100 h-100"
+                          style={{ objectFit: 'contain' }}
+                          onError={(e) => {
+                            e.target.src =
+                              'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600';
+                          }}
+                        />
+                      </div>
+                      <div className="overflow-hidden">
+                        <div
+                          className="fw-semibold text-white text-truncate"
+                          style={{ fontSize: '0.8rem' }}
+                        >
+                          {prod.nombre}
+                        </div>
+                        <div className="fw-bold text-warning" style={{ fontSize: '0.85rem' }}>
+                          ${Number(prod.precio).toLocaleString('es-CL')}
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+
+                  <div className="d-flex flex-column z-1">
+                    <Link
+                      to={`/producto/${prod.id}`}
+                      className="btn btn-light w-100 rounded-0 py-1 px-2 fw-semibold d-flex justify-content-center align-items-center gap-1"
+                      style={{ fontSize: '0.78rem' }}
+                    >
+                      <i className="fa-solid fa-eye" aria-hidden="true"></i>
+                      <span>Ver detalles</span>
+                    </Link>
+
+                    <button
+                      type="button"
+                      className="btn btn-dark w-100 rounded-0 py-2 px-2 d-flex justify-content-center align-items-center gap-2 border-top border-secondary"
+                      style={{ backgroundColor: '#000', fontSize: '0.8rem', fontWeight: '600' }}
+                      onClick={() => agregarAlCarrito(prod)}
+                      disabled={stockDisponible <= 0}
+                    >
+                      <i className="fa-solid fa-cart-plus text-warning" aria-hidden="true"></i>
+                      <span>{stockDisponible <= 0 ? 'Agotado' : 'Agregar al carrito'}</span>
+                    </button>
+                  </div>
+                </article>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* TESTIMONIOS */}
+      <section
+        aria-labelledby="titulo-testimonios"
         className="p-4 rounded-4 border mb-5"
         style={{ backgroundColor: '#eaf4ed', borderColor: '#a3d9b1' }}
       >
         <div className="mb-4 text-center">
-          <h3 className="fw-bold text-dark mb-1">Clientes Felices</h3>
-          <p className="text-muted small m-0">La confianza y satisfacción de nuestra comunidad nos avala</p>
+          <h3 id="titulo-testimonios" className="fw-bold text-dark mb-1">
+            Clientes Felices
+          </h3>
+          <p className="text-muted small m-0">
+            La confianza y satisfacción de nuestra comunidad nos avala
+          </p>
         </div>
 
         <div className="row g-4">
           {testimonios.map((item) => (
             <div key={item.id} className="col-12 col-md-4">
-              <div className="card h-100 border rounded-4 p-3 bg-white text-dark shadow-sm d-flex flex-column justify-content-between">
+              <article className="card h-100 border rounded-4 p-3 bg-white text-dark shadow-sm d-flex flex-column justify-content-between">
                 <div>
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="badge bg-success text-white px-2 py-1 rounded-pill small">Compra Verificada</span>
-                    <span className="fw-bold text-dark small">{item.calificacion}</span>
+                    <span className="badge bg-success text-white px-2 py-1 rounded-pill small">
+                      <i className="fa-solid fa-circle-check me-1" aria-hidden="true"></i>
+                      Compra Verificada
+                    </span>
+                    <span className="fw-bold text-dark small">
+                      <i className="fa-solid fa-star text-warning me-1" aria-hidden="true"></i>
+                      {item.calificacion}
+                    </span>
                   </div>
                   <p className="fst-italic text-muted small mb-3">"{item.comentario}"</p>
                 </div>
                 <div className="pt-2 border-top">
                   <div className="fw-bold text-dark fs-6">{item.nombre}</div>
-                  <div className="text-muted small">{item.ciudad} &bull; <span className="fw-semibold text-success">{item.producto}</span></div>
+                  <div className="text-muted small">
+                    {item.ciudad} &bull;{' '}
+                    <span className="fw-semibold text-success">{item.producto}</span>
+                  </div>
                 </div>
-              </div>
+              </article>
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
-    
-      <h2 className="fw-bold mb-4">Catálogo Completo</h2>
-      <div className="row g-4">
-        {productos.map((prod) => (
-          <div key={prod.id} className="col-12 col-md-6 col-lg-4">
-            <div className="card h-100 shadow-sm border-0 product-card rounded-4 bg-white overflow-hidden">
-              <img
-                src={prod.imagen}
-                className="card-img-top p-3"
-                alt={prod.nombre}
-                style={{ height: '220px', objectFit: 'contain' }}
-                onError={(e) => {
-                  e.target.src = 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600';
-                }}
-              />
-              <div className="card-body d-flex flex-column p-4">
-                <span className="badge bg-secondary mb-2 align-self-start">{prod.categoria || 'Perfumes'}</span>
-                <h5 className="fw-bold mb-2">{prod.nombre}</h5>
-                <p className="text-muted small flex-grow-1">{prod.descripcion}</p>
-                <div className="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
-                  <span className="fw-bold fs-5">${prod.precio.toLocaleString('es-CL')}</span>
-                  <div>
-                    <Link to={`/producto/${prod.id}`} className="btn btn-outline-dark btn-sm rounded-pill me-2">
-                      Ver detalle
-                    </Link>
-                    <button className="btn btn-primary btn-sm rounded-pill" onClick={() => agregarAlCarrito(prod)}>
-                      + Agregar
-                    </button>
+      {/* CATÁLOGO COMPLETO */}
+      <section aria-labelledby="titulo-catalogo-completo">
+        <h2 id="titulo-catalogo-completo" className="fw-bold mb-4">
+          Catálogo Completo
+        </h2>
+        <div className="row g-4">
+          {productos.map((prod) => {
+            const stockDisponible = obtenerStockProducto(prod);
+
+            return (
+              <div key={prod.id} className="col-12 col-md-6 col-lg-4">
+                <article className="card h-100 shadow-sm border-0 product-card rounded-4 bg-white overflow-hidden">
+                  <Link
+                    to={`/producto/${prod.id}`}
+                    className="text-decoration-none"
+                    aria-label={`Ver detalles de ${prod.nombre}`}
+                  >
+                    <img
+                      src={prod.imagen}
+                      className="card-img-top p-3"
+                      alt={prod.nombre}
+                      style={{ height: '220px', objectFit: 'contain' }}
+                      onError={(e) => {
+                        e.target.src =
+                          'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600';
+                      }}
+                    />
+                  </Link>
+                  <div className="card-body d-flex flex-column p-4">
+                    <span className="badge bg-secondary mb-2 align-self-start">
+                      {prod.categoria || 'Perfumes'}
+                    </span>
+                    <h5 className="fw-bold mb-2">
+                      <Link
+                        to={`/producto/${prod.id}`}
+                        className="text-dark text-decoration-none"
+                      >
+                        {prod.nombre}
+                      </Link>
+                    </h5>
+                    <p className="text-muted small flex-grow-1">{prod.descripcion}</p>
+                    <div className="mt-3 pt-3 border-top">
+                      <div className="d-flex justify-content-between align-items-center mb-3">
+                        <span className="fw-bold fs-5">
+                          ${Number(prod.precio).toLocaleString('es-CL')}
+                        </span>
+                        <small className="text-muted">
+                          {stockDisponible > 0 ? `Stock: ${stockDisponible}` : 'Sin stock'}
+                        </small>
+                      </div>
+                      <div className="d-grid gap-2">
+                        <Link
+                          to={`/producto/${prod.id}`}
+                          className="btn btn-outline-dark btn-sm rounded-pill fw-semibold"
+                        >
+                          <i className="fa-solid fa-eye me-1" aria-hidden="true"></i>
+                          Ver detalles
+                        </Link>
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-sm rounded-pill fw-bold"
+                          onClick={() => agregarAlCarrito(prod)}
+                          disabled={stockDisponible <= 0}
+                        >
+                          <i className="fa-solid fa-cart-plus me-1" aria-hidden="true"></i>
+                          {stockDisponible <= 0 ? 'Agotado' : 'Agregar al carrito'}
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </article>
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+            );
+          })}
+        </div>
+      </section>
+    </main>
   );
 }
 

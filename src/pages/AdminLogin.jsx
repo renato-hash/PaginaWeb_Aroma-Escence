@@ -1,92 +1,201 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { loginApi } from '../services/api';
 
 export function AdminLogin({ onLoginAdmin }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errores, setErrores] = useState({});
+  const [errorGeneral, setErrorGeneral] = useState('');
+  const [cargando, setCargando] = useState(false);
 
-  const trabajadoresAutorizados = [
-    { nombre: 'Administrador Principal', email: 'admin@aroma.cl', password: 'admin123', rol: 'admin' },
-    { nombre: 'Operador Tienda', email: 'trabajador@aroma.cl', password: 'staff123', rol: 'trabajador' }
-  ];
+  const validarFormulario = () => {
+    const nuevosErrores = {};
+    const emailLimpio = email.trim().toLowerCase();
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const handleSubmit = (e) => {
+    if (!emailLimpio) {
+      nuevosErrores.email = 'Ingresa tu correo institucional.';
+    } else if (!regexEmail.test(emailLimpio)) {
+      nuevosErrores.email = 'Ingresa un formato de correo válido.';
+    }
+
+    if (!password) {
+      nuevosErrores.password = 'Ingresa tu contraseña de acceso.';
+    } else if (password.length < 6) {
+      nuevosErrores.password = 'La contraseña debe tener al menos 6 caracteres.';
+    }
+
+    setErrores(nuevosErrores);
+    return Object.keys(nuevosErrores).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setErrorGeneral('');
 
-    if (!email || !password) {
-      setError('Por favor completa todos los campos.');
+    if (!validarFormulario()) {
       return;
     }
 
-    
-    const empleadoEncontrado = trabajadoresAutorizados.find(
-      (t) => t.email.toLowerCase() === email.toLowerCase() && t.password === password
-    );
+    const emailLimpio = email.trim().toLowerCase();
+    setCargando(true);
 
-    if (empleadoEncontrado) {
-      const datosSesion = {
-        nombre: empleadoEncontrado.nombre,
-        email: empleadoEncontrado.email,
-        rol: empleadoEncontrado.rol
-      };
-      onLoginAdmin(datosSesion);
-      navigate('/admin');
-    } else {
-      setError('Credenciales de trabajador no válidas. Acceso denegado.');
+    // 1. Autenticación contra el Backend Spring Boot (JWT) usando api.js
+    try {
+      const data = await loginApi(emailLimpio, password);
+      const rolBackend = (data.rol || data.role || '').toUpperCase();
+
+      if (
+        !rolBackend.includes('ADMIN') &&
+        !rolBackend.includes('OPERADOR') &&
+        !rolBackend.includes('TRABAJADOR')
+      ) {
+        setErrorGeneral('Acceso denegado: tu cuenta no tiene permisos de personal.');
+        setCargando(false);
+        return;
+      }
+
+      onLoginAdmin({
+        id: data.id || Date.now(),
+        nombre: data.nombre || 'Operador Tienda',
+        email: data.email || emailLimpio,
+        rol: rolBackend,
+        token: data.token
+      });
+
+      setCargando(false);
+      navigate('/admin', { replace: true });
+      return;
+    } catch (errorApi) {
+      const msg = (errorApi.message || '').toLowerCase();
+      if (msg.includes('incorrect') || msg.includes('credenciales')) {
+        setErrorGeneral('Credenciales institucionales incorrectas.');
+        setCargando(false);
+        return;
+      }
+      // Si el backend Spring Boot aún no está activo, continúa con validación local (.env)
     }
+
+    // 2. Respaldo local mediante variables de entorno (.env)
+    const adminEmailEnv = (import.meta.env.VITE_ADMIN_EMAIL || '').toLowerCase();
+    const adminPassEnv = import.meta.env.VITE_ADMIN_PASS || '';
+    const staffEmailEnv = (import.meta.env.VITE_STAFF_EMAIL || '').toLowerCase();
+    const staffPassEnv = import.meta.env.VITE_STAFF_PASS || '';
+
+    if (adminEmailEnv && emailLimpio === adminEmailEnv && password === adminPassEnv) {
+      onLoginAdmin({
+        id: 1,
+        nombre: 'Administrador Principal',
+        email: emailLimpio,
+        rol: 'ROLE_ADMIN',
+        token: `jwt-admin-${Date.now()}`
+      });
+      setCargando(false);
+      navigate('/admin', { replace: true });
+      return;
+    }
+
+    if (staffEmailEnv && emailLimpio === staffEmailEnv && password === staffPassEnv) {
+      onLoginAdmin({
+        id: 2,
+        nombre: 'Operador Tienda',
+        email: emailLimpio,
+        rol: 'ROLE_OPERADOR',
+        token: `jwt-operador-${Date.now()}`
+      });
+      setCargando(false);
+      navigate('/admin', { replace: true });
+      return;
+    }
+
+    setCargando(false);
+    setErrorGeneral('Correo institucional o contraseña incorrectos.');
   };
 
   return (
-    <div className="container my-5 d-flex justify-content-center">
-      <div className="card shadow-lg p-4 rounded-4 border-dark" style={{ maxWidth: '420px', width: '100%' }}>
+    <main className="container my-5 d-flex justify-content-center">
+      <section
+        aria-labelledby="titulo-portal-trabajadores"
+        className="card shadow-lg p-4 p-md-5 rounded-4 border-0"
+        style={{ maxWidth: '450px', width: '100%' }}
+      >
         <div className="text-center mb-3">
-          <span className="fs-1">🔐</span>
-          <h3 className="fw-bold mt-2">Portal Trabajadores</h3>
-          <p className="text-muted small">Ingreso exclusivo para personal administrativo</p>
+          <div
+            className="d-inline-flex align-items-center justify-content-center bg-warning-subtle text-warning-emphasis rounded-circle mb-2"
+            style={{ width: '56px', height: '56px', fontSize: '1.6rem' }}
+            aria-hidden="true"
+          >
+            🔐
+          </div>
+          <h2 id="titulo-portal-trabajadores" className="fw-bold mb-1">
+            Portal Trabajadores
+          </h2>
+          <p className="text-muted small mb-0">
+            Ingreso exclusivo para personal administrativo
+          </p>
         </div>
 
-        {error && <div className="alert alert-danger py-2 small text-center">{error}</div>}
+        {errorGeneral && (
+          <div className="alert alert-danger py-2 small text-center" role="alert">
+            {errorGeneral}
+          </div>
+        )}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <div className="mb-3">
-            <label className="form-label fw-bold">Correo Institucional</label>
+            <label htmlFor="admin-email" className="form-label fw-bold">
+              Correo Institucional *
+            </label>
             <input
+              id="admin-email"
               type="email"
-              className="form-control"
-              placeholder="admin@aroma.cl"
+              autoComplete="username"
+              className={`form-control ${errores.email ? 'is-invalid' : ''}`}
+              placeholder="correo@aroma.cl"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (errores.email) setErrores((prev) => ({ ...prev, email: '' }));
+                if (errorGeneral) setErrorGeneral('');
+              }}
+              required
             />
+            {errores.email && <div className="invalid-feedback">{errores.email}</div>}
           </div>
 
-          <div className="mb-3">
-            <label className="form-label fw-bold">Contraseña de Acceso</label>
+          <div className="mb-4">
+            <label htmlFor="admin-password" className="form-label fw-bold">
+              Contraseña de Acceso *
+            </label>
             <input
+              id="admin-password"
               type="password"
-              className="form-control"
+              autoComplete="current-password"
+              className={`form-control ${errores.password ? 'is-invalid' : ''}`}
               placeholder="••••••••"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (errores.password) setErrores((prev) => ({ ...prev, password: '' }));
+                if (errorGeneral) setErrorGeneral('');
+              }}
+              required
             />
+            {errores.password && <div className="invalid-feedback">{errores.password}</div>}
           </div>
 
-          <button type="submit" className="btn btn-dark w-100 fw-bold py-2 mb-3">
-            Ingresar al Panel
+          <button
+            type="submit"
+            className="btn btn-dark w-100 fw-bold py-2 rounded-3"
+            disabled={cargando}
+          >
+            {cargando ? 'Verificando acceso...' : 'Ingresar al Panel'}
           </button>
         </form>
-
-        <div className="bg-light p-3 rounded-3 small text-muted">
-          <strong>Credenciales de prueba:</strong>
-          <ul className="mb-0 ps-3 mt-1">
-            <li><code>admin@aroma.cl</code> / <code>admin123</code></li>
-            <li><code>trabajador@aroma.cl</code> / <code>staff123</code></li>
-          </ul>
-        </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
