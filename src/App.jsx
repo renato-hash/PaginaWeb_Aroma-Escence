@@ -17,7 +17,10 @@ import { Navbar } from './components/Navbar';
 import { Piepagina } from './components/Piepagina';
 import { Toast } from './components/Toast';
 import { Catalogo } from './pages/Catalogo';
+import { Productos } from './pages/Productos';
+import { Nosotros } from './pages/Nosotros';
 import { Categorias } from './pages/Categorias';
+import { CategoriaDetalle } from './pages/CategoriaDetalle';
 import { DetalleProducto } from './pages/DetalleProducto';
 import { Carrito } from './pages/Carrito';
 import { Checkout } from './pages/Checkout';
@@ -461,6 +464,11 @@ function AppContent() {
           element={<Catalogo productos={productos} agregarAlCarrito={agregarAlCarrito} />}
         />
         <Route
+          path="/productos"
+          element={<Productos productos={productos} agregarAlCarrito={agregarAlCarrito} />}
+        />
+        <Route path="/nosotros" element={<Nosotros />} />
+        <Route
           path="/busqueda"
           element={
             <ResultadosBusqueda
@@ -473,6 +481,12 @@ function AppContent() {
         <Route
           path="/categorias"
           element={<Categorias productos={productos} agregarAlCarrito={agregarAlCarrito} />}
+        />
+        <Route
+          path="/categorias/:categoria"
+          element={
+            <CategoriaDetalle productos={productos} agregarAlCarrito={agregarAlCarrito} />
+          }
         />
         <Route
           path="/producto/:id"

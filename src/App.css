@@ -182,3 +182,94 @@
     border-right-color: var(--border);
   }
 }
+
+/* 1. Títulos de sección sobre el fondo verde oscuro (Categorías, Catálogo, Ofertas) */
+#root h1,
+#root h2,
+#root h3,
+#root h4 {
+  color: #ffffff !important;
+}
+
+#root section[style*="#eaf4ed"] h2,
+#root section[style*="#eaf4ed"] h3,
+#root section[style*="#f5f5f5"] h2,
+#root section[style*="#f5f5f5"] h3 {
+  color: #162018 !important;
+}
+
+#root .btn-outline-secondary,
+#root .btn-outline-dark:not(.card .btn-outline-dark) {
+  color: #f1f3f5 !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
+#root .card:not(aside):not(.bg-dark):not(.text-white),
+#root .card-body,
+#root [class*="producto"],
+#root [class*="product"] {
+  color: #111111 !important;
+}
+
+#root .card:not(aside):not(.bg-dark):not(.text-white) h1,
+#root .card:not(aside):not(.bg-dark):not(.text-white) h2,
+#root .card:not(aside):not(.bg-dark):not(.text-white) h3,
+#root .card:not(aside):not(.bg-dark):not(.text-white) h4,
+#root .card:not(aside):not(.bg-dark):not(.text-white) h5,
+#root .card:not(aside):not(.bg-dark):not(.text-white) h6,
+#root .card-body h4,
+#root .card-body h5,
+#root .card-body h6,
+#root .card-title,
+#root [class*="producto"] h5,
+#root [class*="producto"] h6 {
+  color: #111111 !important;
+}
+
+#root .card:not(aside):not(.bg-dark):not(.text-white) p,
+#root .card:not(aside):not(.bg-dark):not(.text-white) .card-text,
+#root .card:not(aside):not(.bg-dark):not(.text-white) .text-muted,
+#root .card:not(aside):not(.bg-dark):not(.text-white) small,
+#root .card:not(aside):not(.bg-dark):not(.text-white) span:not(.badge):not(.btn):not(.text-danger):not(.text-success),
+#root .card-body p,
+#root .card-body .card-text,
+#root .card-body .text-muted,
+#root .card-body small,
+#root .card-body span:not(.badge):not(.btn):not(.text-danger):not(.text-success),
+#root [class*="producto"] p,
+#root [class*="producto"] span:not(.badge):not(.btn) {
+  color: #1a1a1a !important;
+}
+
+/* 3. Mantiene letras BLANCAS en tarjetas oscuras (Login, Registro, Carrito y Checkout) */
+#root form .card,
+#root form .card .card-body,
+#root aside.card,
+#root aside.card .card-body,
+#root .card.bg-dark,
+#root .card.bg-dark .card-body {
+  background-color: #162018 !important;
+  color: #ffffff !important;
+}
+
+#root form .card h4,
+#root form .card h5,
+#root form .card h6,
+#root form .card label,
+#root form .card p:not(.alert p),
+#root aside.card h4,
+#root aside.card h5,
+#root aside.card h6,
+#root aside.card span:not(.badge):not(.text-success):not(.text-warning):not(.text-danger),
+#root .card.bg-dark h4,
+#root .card.bg-dark h5,
+#root .card.bg-dark h6,
+#root .card.bg-dark p {
+  color: #ffffff !important;
+}
+
+#root form .card .bg-light,
+#root form .card .bg-light label {
+  background-color: #f8f9fa !important;
+  color: #111111 !important;
+}

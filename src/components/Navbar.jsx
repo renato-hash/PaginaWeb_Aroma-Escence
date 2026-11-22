@@ -20,16 +20,6 @@ export function Navbar({
     }
   };
 
-  const irANosotros = (e) => {
-    e.preventDefault();
-    const piePagina = document.getElementById('pie-pagina');
-    if (piePagina) {
-      piePagina.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }
-  };
-
   const handleCerrarSesionCliente = () => {
     cerrarSesion();
     navigate('/');
@@ -69,6 +59,11 @@ export function Navbar({
                 </Link>
               </li>
               <li className="nav-item">
+                <Link className="nav-link" to="/productos">
+                  Catálogo
+                </Link>
+              </li>
+              <li className="nav-item">
                 <Link className="nav-link" to="/categorias">
                   Categorías
                 </Link>
@@ -79,9 +74,9 @@ export function Navbar({
                 </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#pie-pagina" onClick={irANosotros}>
+                <Link className="nav-link" to="/nosotros">
                   Nosotros
-                </a>
+                </Link>
               </li>
               {esOperadorActivo && (
                 <li className="nav-item">

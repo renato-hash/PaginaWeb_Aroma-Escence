@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { crearPedidoApi } from '../services/api';
 
+const ENVIO_GRATIS_DESDE = 60000;
+const VALOR_ENVIO = 4990;
+
 const formatearRut = (valor) => {
   const limpio = valor.replace(/[^0-9kK]/g, '').toUpperCase().slice(0, 9);
   if (limpio.length <= 1) return limpio;
@@ -107,10 +110,13 @@ export function Checkout({
     return false;
   });
 
-  const total = carrito.reduce(
+  const subtotal = carrito.reduce(
     (acc, item) => acc + Number(item.precio) * Number(item.cantidad),
     0
   );
+
+  const costoEnvio = subtotal > 0 && subtotal < ENVIO_GRATIS_DESDE ? VALOR_ENVIO : 0;
+  const total = subtotal + costoEnvio;
 
   const handleInputChange = (e) => {
     let { name, value } = e.target;
@@ -235,7 +241,7 @@ export function Checkout({
     e.preventDefault();
     setErrorGeneral('');
 
-    if (carrito.length === 0 || total <= 0) {
+    if (carrito.length === 0 || subtotal <= 0) {
       setErrorGeneral('Tu carrito está vacío o tiene montos inválidos.');
       return;
     }
@@ -290,6 +296,8 @@ export function Checkout({
         precio: Number(item.precio),
         cantidad: Number(item.cantidad)
       })),
+      subtotal,
+      costoEnvio,
       total
     };
 
@@ -358,9 +366,9 @@ export function Checkout({
     return (
       <main className="container text-center my-5 py-5">
         <section>
-          <h2 className="fw-bold mb-3">Tu carrito está vacío</h2>
-          <p className="text-muted mb-4">Agrega productos antes de proceder al pago.</p>
-          <Link to="/" className="btn btn-warning fw-bold rounded-pill px-4">
+          <h2 className="fw-bold text-white mb-3">Tu carrito está vacío</h2>
+          <p className="text-light opacity-75 mb-4">Agrega productos antes de proceder al pago.</p>
+          <Link to="/productos" className="btn btn-warning text-dark fw-bold rounded-pill px-4">
             Ir al Catálogo
           </Link>
         </section>
@@ -371,7 +379,7 @@ export function Checkout({
   return (
     <main className="container my-5">
       <section aria-labelledby="titulo-checkout">
-        <h2 id="titulo-checkout" className="fw-bold mb-4">
+        <h2 id="titulo-checkout" className="fw-bold text-white mb-4">
           Finalizar Compra
         </h2>
 
@@ -542,7 +550,9 @@ export function Checkout({
 
                 <div className="d-flex flex-column gap-3 mb-4">
                   <div
-                    className={`border rounded-3 p-3 d-flex align-items-center gap-3 ${metodoPago === 'tarjeta' ? 'border-warning bg-light' : ''}`}
+                    className={`border rounded-3 p-3 d-flex align-items-center gap-3 ${
+                      metodoPago === 'tarjeta' ? 'border-warning bg-light text-dark' : ''
+                    }`}
                     onClick={() => setMetodoPago('tarjeta')}
                     style={{ cursor: 'pointer' }}
                   >
@@ -555,7 +565,9 @@ export function Checkout({
                     />
                     <label
                       htmlFor="pagoTarjeta"
-                      className="m-0 fw-bold flex-grow-1"
+                      className={`m-0 fw-bold flex-grow-1 ${
+                        metodoPago === 'tarjeta' ? 'text-dark' : ''
+                      }`}
                       style={{ cursor: 'pointer' }}
                     >
                       Tarjeta de Crédito / Débito (Webpay)
@@ -564,7 +576,9 @@ export function Checkout({
                   </div>
 
                   <div
-                    className={`border rounded-3 p-3 d-flex align-items-center gap-3 ${metodoPago === 'transferencia' ? 'border-warning bg-light' : ''}`}
+                    className={`border rounded-3 p-3 d-flex align-items-center gap-3 ${
+                      metodoPago === 'transferencia' ? 'border-warning bg-light text-dark' : ''
+                    }`}
                     onClick={() => setMetodoPago('transferencia')}
                     style={{ cursor: 'pointer' }}
                   >
@@ -577,7 +591,9 @@ export function Checkout({
                     />
                     <label
                       htmlFor="pagoTransferencia"
-                      className="m-0 fw-bold flex-grow-1"
+                      className={`m-0 fw-bold flex-grow-1 ${
+                        metodoPago === 'transferencia' ? 'text-dark' : ''
+                      }`}
                       style={{ cursor: 'pointer' }}
                     >
                       Transferencia Bancaria
@@ -586,7 +602,9 @@ export function Checkout({
                   </div>
 
                   <div
-                    className={`border rounded-3 p-3 d-flex align-items-center gap-3 ${metodoPago === 'mercadopago' ? 'border-warning bg-light' : ''}`}
+                    className={`border rounded-3 p-3 d-flex align-items-center gap-3 ${
+                      metodoPago === 'mercadopago' ? 'border-warning bg-light text-dark' : ''
+                    }`}
                     onClick={() => setMetodoPago('mercadopago')}
                     style={{ cursor: 'pointer' }}
                   >
@@ -599,7 +617,9 @@ export function Checkout({
                     />
                     <label
                       htmlFor="pagoMercadopago"
-                      className="m-0 fw-bold flex-grow-1"
+                      className={`m-0 fw-bold flex-grow-1 ${
+                        metodoPago === 'mercadopago' ? 'text-dark' : ''
+                      }`}
                       style={{ cursor: 'pointer' }}
                     >
                       Mercado Pago / Servipag
@@ -753,10 +773,30 @@ export function Checkout({
                       </li>
                     );
                   })}
-                  <li className="list-group-item d-flex justify-content-between align-items-center px-0 text-success">
-                    <span>Envío a Domicilio</span>
-                    <span>GRATIS</span>
+
+                  <li className="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <span>Subtotal Productos</span>
+                    <span>${subtotal.toLocaleString('es-CL')}</span>
                   </li>
+
+                  <li className="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <div>
+                      <span>Envío a Domicilio</span>
+                      {costoEnvio > 0 && (
+                        <small className="d-block text-muted">
+                          Gratis en compras desde ${ENVIO_GRATIS_DESDE.toLocaleString('es-CL')}
+                        </small>
+                      )}
+                    </div>
+                    {costoEnvio === 0 ? (
+                      <span className="text-success fw-bold">GRATIS</span>
+                    ) : (
+                      <span className="fw-semibold">
+                        ${costoEnvio.toLocaleString('es-CL')}
+                      </span>
+                    )}
+                  </li>
+
                   <li className="list-group-item d-flex justify-content-between align-items-center px-0 fs-5 fw-bold border-top pt-3">
                     <span>Total CLP</span>
                     <span className="text-warning">${total.toLocaleString('es-CL')}</span>
@@ -765,7 +805,7 @@ export function Checkout({
 
                 <button
                   type="submit"
-                  className="btn btn-warning w-100 fw-bold py-3 rounded-pill fs-5 shadow-sm"
+                  className="btn btn-warning text-dark w-100 fw-bold py-3 rounded-pill fs-5 shadow-sm"
                   disabled={problemasStock.length > 0 || procesando}
                 >
                   {procesando

@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+const ENVIO_GRATIS_DESDE = 60000;
+const VALOR_ENVIO = 4990;
+
 export function Carrito({
   carrito = [],
   productos = [],
@@ -55,14 +58,18 @@ export function Carrito({
     };
   });
 
-  const total = itemsValidados.reduce(
+  const subtotal = itemsValidados.reduce(
     (acc, item) => (item.esValido ? acc + item.precio * item.cantidad : acc),
     0
   );
 
+  const costoEnvio = subtotal > 0 && subtotal < ENVIO_GRATIS_DESDE ? VALOR_ENVIO : 0;
+  const total = subtotal + costoEnvio;
+  const faltaParaEnvioGratis = Math.max(0, ENVIO_GRATIS_DESDE - subtotal);
+
   const cantidadTotalUnidades = itemsValidados.reduce((acc, item) => acc + item.cantidad, 0);
   const hayErroresEnCarrito = itemsValidados.some((item) => !item.esValido);
-  const puedeContinuarPago = itemsValidados.length > 0 && !hayErroresEnCarrito && total > 0;
+  const puedeContinuarPago = itemsValidados.length > 0 && !hayErroresEnCarrito && subtotal > 0;
 
   const handleVaciarCarrito = () => {
     if (window.confirm('¿Estás seguro de que deseas eliminar todos los productos del carrito?')) {
@@ -85,7 +92,7 @@ export function Carrito({
     <main className="container my-4">
       <section aria-labelledby="titulo-carrito">
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 id="titulo-carrito" className="fw-bold mb-0">
+          <h2 id="titulo-carrito" className="fw-bold text-white mb-0">
             Carrito de Compras / Boleta
           </h2>
           {itemsValidados.length > 0 && (
@@ -101,7 +108,7 @@ export function Carrito({
             role="alert"
           >
             <span>Tu carrito está vacío. Agrega productos desde el catálogo para continuar.</span>
-            <Link to="/" className="btn btn-primary btn-sm fw-bold">
+            <Link to="/productos" className="btn btn-primary btn-sm fw-bold">
               Ir al Catálogo
             </Link>
           </div>
@@ -169,7 +176,7 @@ export function Carrito({
                             </div>
                           )}
                           {!item.excedeStock && limiteAlcanzado && !item.sinStock && (
-                            <small className="text-warning-emphasis fw-semibold d-block mt-1">
+                            <small className="text-warning fw-semibold d-block mt-1">
                               Stock máximo alcanzado
                             </small>
                           )}
@@ -183,7 +190,7 @@ export function Carrito({
                           >
                             <button
                               type="button"
-                              className="btn btn-outline-secondary"
+                              className="btn btn-outline-light"
                               onClick={() =>
                                 actualizarCantidad(item.id, item.cantidad - 1, item.mlItem)
                               }
@@ -191,12 +198,15 @@ export function Carrito({
                             >
                               -
                             </button>
-                            <span className="btn btn-light disabled fw-bold text-dark">
+                            <span
+                              className="btn btn-light disabled fw-bold text-dark"
+                              style={{ opacity: 1 }}
+                            >
                               {item.cantidad}
                             </span>
                             <button
                               type="button"
-                              className="btn btn-outline-secondary"
+                              className="btn btn-outline-light"
                               onClick={() =>
                                 actualizarCantidad(item.id, item.cantidad + 1, item.mlItem)
                               }
@@ -226,7 +236,7 @@ export function Carrito({
               </ul>
 
               <div className="d-flex justify-content-between">
-                <Link to="/" className="btn btn-outline-secondary">
+                <Link to="/productos" className="btn btn-outline-light">
                   Seguir Comprando
                 </Link>
                 <button
@@ -246,12 +256,34 @@ export function Carrito({
                   <hr />
                   <div className="d-flex justify-content-between mb-2 text-muted">
                     <span>Productos ({cantidadTotalUnidades}):</span>
-                    <span>${total.toLocaleString('es-CL')}</span>
+                    <span>${subtotal.toLocaleString('es-CL')}</span>
                   </div>
-                  <div className="d-flex justify-content-between mb-2 text-success">
+
+                  <div className="d-flex justify-content-between mb-3">
                     <span>Envío:</span>
-                    <span>GRATIS</span>
+                    {costoEnvio === 0 ? (
+                      <span className="text-success fw-bold">GRATIS</span>
+                    ) : (
+                      <span className="fw-semibold">
+                        ${costoEnvio.toLocaleString('es-CL')}
+                      </span>
+                    )}
                   </div>
+
+                  {faltaParaEnvioGratis > 0 && (
+                    <div
+                      className="small text-warning mb-3 p-2 rounded-3"
+                      style={{
+                        backgroundColor: 'rgba(255, 193, 7, 0.12)',
+                        border: '1px solid rgba(255, 193, 7, 0.35)'
+                      }}
+                    >
+                      <i className="fa-solid fa-truck-fast me-1" aria-hidden="true"></i>
+                      Agrega <strong>${faltaParaEnvioGratis.toLocaleString('es-CL')}</strong> más
+                      para tener <strong>envío GRATIS</strong>.
+                    </div>
+                  )}
+
                   <hr />
                   <div className="d-flex justify-content-between fs-5 fw-bold mb-3">
                     <span>Total:</span>

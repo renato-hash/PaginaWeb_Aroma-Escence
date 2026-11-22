@@ -5,12 +5,25 @@
   --accent-color: #d4a373;
   --bg-light: #f8f9fa;
   --text-dark: #2b2d42;
+  --bs-body-bg: #1c241e;
 }
 
-body {
+html, body, #root {
+  min-height: 100vh;
   font-family: 'Poppins', sans-serif;
-  background-color: #faf9f6;
   color: var(--text-dark);
+  background-color: #1c241e !important;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23d4a373' stroke-width='0.7' stroke-opacity='0.16'%3E%3Cline x1='32' y1='0' x2='32' y2='64'/%3E%3Cline x1='0' y1='32' x2='64' y2='32'/%3E%3Crect x='26' y='26' width='12' height='12' transform='rotate(45 32 32)'/%3E%3C/g%3E%3C/svg%3E"),
+    radial-gradient(circle at 50% 0%, #2a362d 0%, #141a15 100%) !important;
+  background-repeat: repeat, no-repeat !important;
+  background-attachment: fixed !important;
+}
+
+/* Asegura que los títulos fuera de tarjetas blancas se lean en tono marfil */
+main > section > h2,
+main > section > div > h2 {
+  color: #f4efe6;
 }
 
 /* Navbar */
@@ -64,7 +77,6 @@ body {
   font-size: 1.25rem;
 }
 
-/* Botones */
 .btn-primary {
   background-color: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
@@ -89,4 +101,315 @@ body {
 .btn-accent:hover {
   background-color: #bc8a5f;
   color: white;
+}
+
+input.form-control,
+input[type="search"],
+input[type="text"] {
+  color: #ffffff;
+}
+
+input.form-control::placeholder,
+input[type="search"]::placeholder,
+input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.72) !important;
+  opacity: 1 !important;
+}
+
+input.bg-white {
+  color: #212529 !important;
+}
+
+input.bg-white::placeholder {
+  color: #6c757d !important;
+}
+
+.card:not(.bg-white):not(.bg-light) h1,
+.card:not(.bg-white):not(.bg-light) h2,
+.card:not(.bg-white):not(.bg-light) h3,
+.card:not(.bg-white):not(.bg-light) h4,
+.card:not(.bg-white):not(.bg-light) h5,
+.card:not(.bg-white):not(.bg-light) h6,
+.card:not(.bg-white):not(.bg-light) label,
+.card:not(.bg-white):not(.bg-light) .form-label,
+.card:not(.bg-white):not(.bg-light) p:not(.alert p) {
+  color: #ffffff !important;
+}
+
+.card:not(.bg-white):not(.bg-light) .text-muted,
+.card:not(.bg-white):not(.bg-light) small {
+  color: rgba(255, 255, 255, 0.78) !important;
+}
+
+.card:not(.bg-white):not(.bg-light) .list-group-item {
+  background-color: transparent !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+select.form-select {
+  background-color: #212529 !important;
+  color: #ffffff !important;
+  border-color: #6c757d !important;
+}
+
+input.form-control,
+input.form-control:focus,
+textarea.form-control,
+textarea.form-control:focus,
+input[type="password"],
+input[type="password"]:focus,
+input[type="email"],
+input[type="email"]:focus,
+input[type="text"],
+input[type="text"]:focus,
+input[type="number"],
+input[type="number"]:focus,
+input[type="tel"],
+input[type="tel"]:focus,
+input[type="search"],
+input[type="search"]:focus {
+  color: #ffffff !important;
+  caret-color: #ffffff !important;
+}
+
+input.form-control:-webkit-autofill,
+input.form-control:-webkit-autofill:hover,
+input.form-control:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px #1e2420 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input.bg-white,
+input.bg-white:focus,
+input.bg-light,
+input.bg-light:focus {
+  color: #212529 !important;
+  caret-color: #212529 !important;
+  -webkit-text-fill-color: #212529 !important;
+}
+
+input.form-control,
+input.form-control:focus,
+input.form-control:active,
+textarea.form-control,
+textarea.form-control:focus,
+select.form-select {
+  color-scheme: dark;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff !important;
+}
+
+input.form-control::selection,
+textarea.form-control::selection {
+  background-color: #ffc107;
+  color: #162018 !important;
+  -webkit-text-fill-color: #162018 !important;
+}
+
+input.form-control::target-text,
+textarea.form-control::target-text {
+  background-color: rgba(255, 193, 7, 0.35);
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+input.bg-white,
+input.bg-white:focus,
+input.bg-light,
+input.bg-light:focus {
+  color-scheme: light;
+  color: #212529 !important;
+  -webkit-text-fill-color: #212529 !important;
+  caret-color: #212529 !important;
+}
+
+.list-group-item {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.list-group-item h1,
+.list-group-item h2,
+.list-group-item h3,
+.list-group-item h4,
+.list-group-item h5,
+.list-group-item h6,
+.list-group-item p,
+.list-group-item span:not(.badge):not(.bg-white):not(.bg-light),
+.list-group-item strong,
+.list-group-item .text-dark {
+  color: #ffffff !important;
+}
+
+.list-group-item .text-muted,
+.list-group-item small {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.card:not(.bg-white):not(.bg-light) span:not(.badge):not(.bg-white):not(.bg-light):not(.text-success):not(.text-warning):not(.text-danger),
+.card:not(.bg-white):not(.bg-light) strong:not(.text-success):not(.text-warning):not(.text-danger),
+.card:not(.bg-white):not(.bg-light) .text-dark {
+  color: #ffffff !important;
+}
+
+.bg-white,
+.bg-white .text-dark,
+.bg-light,
+.bg-light .text-dark {
+  color: #212529 !important;
+}
+
+#root h1,
+#root h2,
+#root h3 {
+  color: #ffffff !important;
+}
+
+section[style*="#eaf4ed"] h2,
+section[style*="#eaf4ed"] h3,
+section[style*="#f5f5f5"] h2,
+section[style*="#f5f5f5"] h3 {
+  color: #162018 !important;
+}
+
+#root .row > [class*="col"] > div:not(.text-white):not(.bg-dark):not(aside),
+#root .row > [class*="col"] > article:not(.text-white):not(.bg-dark):not(aside),
+#root [class*="categoria"] > div:not(.text-white):not(.bg-dark),
+#root .card:not(aside):not(.text-white):not(.bg-dark),
+#root .bg-white {
+  color: #111111 !important;
+}
+
+#root .row > [class*="col"] > div:not(.text-white):not(.bg-dark) h3,
+#root .row > [class*="col"] > div:not(.text-white):not(.bg-dark) h4,
+#root .row > [class*="col"] > div:not(.text-white):not(.bg-dark) h5,
+#root .row > [class*="col"] > div:not(.text-white):not(.bg-dark) h6,
+#root .row > [class*="col"] > article:not(.text-white):not(.bg-dark) h3,
+#root .row > [class*="col"] > article:not(.text-white):not(.bg-dark) h4,
+#root .row > [class*="col"] > article:not(.text-white):not(.bg-dark) h5,
+#root .row > [class*="col"] > article:not(.text-white):not(.bg-dark) h6,
+#root .card:not(aside):not(.text-white):not(.bg-dark) h4,
+#root .card:not(aside):not(.text-white):not(.bg-dark) h5,
+#root .card:not(aside):not(.text-white):not(.bg-dark) h6,
+#root .bg-white h4,
+#root .bg-white h5,
+#root .bg-white h6 {
+  color: #111111 !important;
+}
+
+#root .row > [class*="col"] > div:not(.text-white):not(.bg-dark) p,
+#root .row > [class*="col"] > div:not(.text-white):not(.bg-dark) small,
+#root .row > [class*="col"] > div:not(.text-white):not(.bg-dark) span:not(.badge):not(.btn):not(.text-danger):not(.text-success),
+#root .row > [class*="col"] > article:not(.text-white):not(.bg-dark) p,
+#root .row > [class*="col"] > article:not(.text-white):not(.bg-dark) small,
+#root .row > [class*="col"] > article:not(.text-white):not(.bg-dark) span:not(.badge):not(.btn):not(.text-danger):not(.text-success),
+#root .card:not(aside):not(.text-white):not(.bg-dark) p,
+#root .card:not(aside):not(.text-white):not(.bg-dark) small,
+#root .card:not(aside):not(.text-white):not(.bg-dark) span:not(.badge):not(.btn):not(.text-danger):not(.text-success),
+#root .bg-white p,
+#root .bg-white small,
+#root .bg-white span:not(.badge):not(.btn):not(.text-danger):not(.text-success) {
+  color: #222222 !important;
+}
+
+#root form .card,
+#root form .card h4,
+#root form .card h5,
+#root form .card h6,
+#root form .card label,
+#root form .card p:not(.alert p),
+#root aside.card,
+#root aside.card h4,
+#root aside.card h5,
+#root aside.card h6,
+#root aside.card span:not(.badge):not(.text-success):not(.text-warning):not(.text-danger) {
+  color: #ffffff !important;
+}
+
+#root form .card .bg-light,
+#root form .card .bg-light label {
+  color: #111111 !important;
+}
+
+#root #titulo-faq,
+#root section[style*="245, 245, 245"] h2,
+#root section[style*="#f5f5f5"] h2,
+#root section[style*="234, 244, 237"] h2,
+#root section[style*="234, 244, 237"] h3,
+#root section[style*="#eaf4ed"] h2,
+#root section[style*="#eaf4ed"] h3 {
+  color: #111111 !important;
+}
+#root .card:has(form),
+#root .card:has(table) {
+  background-color: #162018 !important;
+  color: #ffffff !important;
+}
+
+#root .card:has(form) h1,
+#root .card:has(form) h2,
+#root .card:has(form) h3,
+#root .card:has(form) h4,
+#root .card:has(form) h5,
+#root .card:has(form) h6,
+#root .card:has(table) h1,
+#root .card:has(table) h2,
+#root .card:has(table) h3,
+#root .card:has(table) h4,
+#root .card:has(table) h5,
+#root .card:has(table) h6 {
+  color: #ffffff !important;
+}
+
+#root .table,
+#root .table > :not(caption) > * > * {
+  background-color: transparent !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+#root .table td,
+#root .table td strong,
+#root .table td span:not(.badge):not(.btn):not(.text-warning):not(.text-success):not(.text-danger),
+#root .table td div:not(.badge),
+#root .table td .text-dark,
+#root .table td .text-muted {
+  color: #ffffff !important;
+}
+
+#root main > div:first-child button:not(.btn-warning):not(.btn-success):not(.btn-danger):not(.btn-primary),
+#root section > div:first-child button:not(.btn-warning):not(.btn-success):not(.btn-danger):not(.btn-primary),
+#root .btn-outline-dark:not(.card .btn-outline-dark) {
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+}
+
+#root main > div:first-child button:not(.btn-warning):not(.btn-success):not(.btn-danger):not(.btn-primary):hover,
+#root section > div:first-child button:not(.btn-warning):not(.btn-success):not(.btn-danger):not(.btn-primary):hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+select.form-select option {
+  background-color: #162018;
+  color: #ffffff;
+}
+
+#root#root :is(.card, div, article, section):not(.bg-white):not(.bg-light):not(.product-card):has(form) :is(h1, h2, h3, h4, h5, h6):not(.text-warning):not(.text-success):not(.text-danger),
+#root#root :is(.card, div, article, section):not(.bg-white):not(.bg-light):not(.product-card):has(table) :is(h1, h2, h3, h4, h5, h6):not(.text-warning):not(.text-success):not(.text-danger) {
+  color: #ffffff !important;
+}
+
+#root#root .table td,
+#root#root .table td :is(p, h1, h2, h3, h4, h5, h6, strong, b, div, span, a, li):not(.badge):not(.btn):not(.text-warning):not(.text-success):not(.text-danger):not(.text-info),
+#root#root .table td :is(.text-dark, .text-black, .text-body, .text-secondary) {
+  color: #ffffff !important;
+}
+
+#root#root .table td :is(small, .small, .text-muted) {
+  color: #e9ecef !important;
 }
