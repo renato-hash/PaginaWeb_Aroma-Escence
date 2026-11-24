@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { crearPedidoApi } from '../services/api';
 
@@ -48,6 +48,7 @@ export function Checkout({
   mostrarNotificacion
 }) {
   const navigate = useNavigate();
+  const checkoutRef = useRef(null);
 
   const regionesChile = [
     'Arica y Parinacota',
@@ -91,6 +92,19 @@ export function Checkout({
   const [errores, setErrores] = useState({});
   const [errorGeneral, setErrorGeneral] = useState('');
   const [procesando, setProcesando] = useState(false);
+
+  useEffect(() => {
+    const contenedor = checkoutRef.current;
+    if (!contenedor) return;
+
+    contenedor
+      .querySelectorAll('.titulo-compra-blanco, .invalid-feedback')
+      .forEach((el) => {
+        el.style.setProperty('color', '#ffffff', 'important');
+        el.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
+        el.style.setProperty('opacity', '1', 'important');
+      });
+  }, [carrito.length, metodoPago, errores]);
 
   const problemasStock = carrito.filter((item) => {
     const mlItem = item.ml || item.tamano || null;
@@ -377,9 +391,26 @@ export function Checkout({
   }
 
   return (
-    <main className="container my-5">
+    <main ref={checkoutRef} className="container my-5">
+      <style>{`
+        html body main .card .titulo-compra-blanco,
+        html body main .titulo-compra-blanco,
+        html body main .card .invalid-feedback,
+        html body main .invalid-feedback,
+        html body main .form-control.is-invalid ~ .invalid-feedback,
+        html body main .form-select.is-invalid ~ .invalid-feedback {
+          color: #ffffff !important;
+          -webkit-text-fill-color: #ffffff !important;
+          opacity: 1 !important;
+        }
+      `}</style>
+
       <section aria-labelledby="titulo-checkout">
-        <h2 id="titulo-checkout" className="fw-bold text-white mb-4">
+        <h2
+          id="titulo-checkout"
+          className="fw-bold mb-4 titulo-compra-blanco"
+          style={{ color: '#ffffff' }}
+        >
           Finalizar Compra
         </h2>
 
@@ -405,7 +436,12 @@ export function Checkout({
           <div className="row g-4">
             <div className="col-lg-7">
               <article className="card shadow-sm border-0 p-4 mb-4 rounded-4">
-                <h4 className="fw-bold mb-3 text-warning">1. Datos de Envío y Boleta</h4>
+                <h4
+                  className="fw-bold mb-3 titulo-compra-blanco"
+                  style={{ color: '#ffffff' }}
+                >
+                  1. Datos de Envío y Boleta
+                </h4>
                 <div className="row g-3">
                   <div className="col-md-6">
                     <label htmlFor="checkout-rut" className="form-label fw-bold">
@@ -546,7 +582,12 @@ export function Checkout({
               </article>
 
               <article className="card shadow-sm border-0 p-4 rounded-4">
-                <h4 className="fw-bold mb-3 text-warning">2. Método de Pago</h4>
+                <h4
+                  className="fw-bold mb-3 titulo-compra-blanco"
+                  style={{ color: '#ffffff' }}
+                >
+                  2. Método de Pago
+                </h4>
 
                 <div className="d-flex flex-column gap-3 mb-4">
                   <div
@@ -630,7 +671,12 @@ export function Checkout({
 
                 {metodoPago === 'tarjeta' && (
                   <div className="border-top pt-3 mt-2">
-                    <h6 className="fw-bold mb-3">Datos de la Tarjeta</h6>
+                    <h6
+                      className="fw-bold mb-3 titulo-compra-blanco"
+                      style={{ color: '#ffffff' }}
+                    >
+                      Datos de la Tarjeta
+                    </h6>
                     <div className="row g-3">
                       <div className="col-12">
                         <label htmlFor="card-numero" className="form-label small fw-bold">
@@ -752,7 +798,12 @@ export function Checkout({
                 className="card shadow-sm border-0 p-4 rounded-4 position-sticky"
                 style={{ top: '90px' }}
               >
-                <h4 className="fw-bold mb-3">Resumen del Pedido</h4>
+                <h4
+                  className="fw-bold mb-3 titulo-compra-blanco"
+                  style={{ color: '#ffffff' }}
+                >
+                  Resumen del Pedido
+                </h4>
                 <ul className="list-group list-group-flush mb-3">
                   {carrito.map((item) => {
                     const mlItem = item.ml || item.tamano || null;
@@ -762,12 +813,15 @@ export function Checkout({
                         className="list-group-item d-flex justify-content-between align-items-center px-0"
                       >
                         <div>
-                          <h6 className="my-0 fw-bold">
+                          <h6
+                            className="my-0 fw-bold titulo-compra-blanco"
+                            style={{ color: '#ffffff' }}
+                          >
                             {item.nombre} {mlItem && `(${mlItem})`}
                           </h6>
                           <small className="text-muted">Cantidad: {item.cantidad}</small>
                         </div>
-                        <span className="text-muted">
+                        <span className="titulo-compra-blanco" style={{ color: '#ffffff' }}>
                           ${(Number(item.precio) * Number(item.cantidad)).toLocaleString('es-CL')}
                         </span>
                       </li>
@@ -776,7 +830,9 @@ export function Checkout({
 
                   <li className="list-group-item d-flex justify-content-between align-items-center px-0">
                     <span>Subtotal Productos</span>
-                    <span>${subtotal.toLocaleString('es-CL')}</span>
+                    <span className="titulo-compra-blanco" style={{ color: '#ffffff' }}>
+                      ${subtotal.toLocaleString('es-CL')}
+                    </span>
                   </li>
 
                   <li className="list-group-item d-flex justify-content-between align-items-center px-0">
@@ -791,7 +847,7 @@ export function Checkout({
                     {costoEnvio === 0 ? (
                       <span className="text-success fw-bold">GRATIS</span>
                     ) : (
-                      <span className="fw-semibold">
+                      <span className="fw-semibold titulo-compra-blanco" style={{ color: '#ffffff' }}>
                         ${costoEnvio.toLocaleString('es-CL')}
                       </span>
                     )}

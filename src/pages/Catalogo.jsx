@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { BarraBeneficios } from '../components/BarraBeneficios';
 import { PreguntasFrecuentes } from '../components/PreguntasFrecuentes';
+import { BannerLanzamiento } from '../components/BannerLanzamiento';
+import { SuscripcionNewsletter } from '../components/SuscripcionNewsletter';
 
 function VideoPromocional() {
   return (
@@ -14,7 +16,7 @@ function VideoPromocional() {
 
       <div className="ratio ratio-16x9 rounded-3 overflow-hidden shadow-sm bg-dark">
         <video
-          src="public/images/promo.mp4"
+          src="/images/promo.mp4"
           autoPlay
           muted
           loop
@@ -75,8 +77,19 @@ export function Catalogo({ productos = [], agregarAlCarrito }) {
   ];
 
   const carruselRef = useRef(null);
+  const bannerMatchRef = useRef(null);
   const ultimoCambioWheelRef = useRef(0);
   const [slideActual, setSlideActual] = useState(0);
+
+  useEffect(() => {
+    const banner = bannerMatchRef.current;
+    if (!banner) return;
+
+    banner.querySelectorAll('.texto-blanco-forzado').forEach((el) => {
+      el.style.setProperty('color', '#ffffff', 'important');
+      el.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
+    });
+  }, []);
 
   useEffect(() => {
     const contenedor = carruselRef.current;
@@ -172,7 +185,7 @@ export function Catalogo({ productos = [], agregarAlCarrito }) {
     <>
       <BarraBeneficios />
 
-      <main className="container my-4">
+      <main className="container mt-4">
         <section aria-label="Destacados principales" className="row g-4 mb-5 align-items-stretch">
           <div className="col-12 col-lg-5">
             <VideoPromocional />
@@ -315,6 +328,98 @@ export function Catalogo({ productos = [], agregarAlCarrito }) {
                     onClick={() => setSlideActual(index)}
                   />
                 ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section aria-label="Descubre tu Perfume Match" className="mb-5">
+          <style>{`
+            html body main section .banner-match-inicio .texto-blanco-forzado {
+              color: #ffffff !important;
+              -webkit-text-fill-color: #ffffff !important;
+              opacity: 1 !important;
+            }
+          `}</style>
+
+          <div
+            ref={bannerMatchRef}
+            className="banner-match-inicio rounded-4 p-4 p-md-5 shadow-lg position-relative overflow-hidden"
+            style={{
+              backgroundImage: `linear-gradient(90deg, rgba(16, 24, 18, 0.95) 0%, rgba(22, 32, 24, 0.80) 55%, rgba(22, 32, 24, 0.40) 100%), url('/images/match.avif')`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              border: '1px solid rgba(255, 193, 7, 0.35)'
+            }}
+          >
+            <div className="row align-items-center g-4 position-relative" style={{ zIndex: 2 }}>
+              <div className="col-12 col-lg-8 text-center text-lg-start">
+                <span
+                  className="badge rounded-pill px-3 py-2 mb-3 text-uppercase"
+                  style={{
+                    backgroundColor: 'rgba(22, 32, 24, 0.75)',
+                    border: '1px solid rgba(255, 193, 7, 0.5)',
+                    letterSpacing: '0.08em',
+                    color: '#f5d08a'
+                  }}
+                >
+                  <i className="fa-solid fa-wand-magic-sparkles me-2" aria-hidden="true"></i>
+                  Test de Personalidad Olfativa
+                </span>
+
+                <div
+                  role="heading"
+                  aria-level="2"
+                  className="fw-bold fs-2 mb-2 texto-blanco-forzado"
+                  style={{ textShadow: '0 2px 10px rgba(0, 0, 0, 0.75)' }}
+                >
+                  ¿No sabes qué fragancia elegir? Descubre tu{' '}
+                  <span className="texto-blanco-forzado">Perfume Match</span>
+                </div>
+
+                <p
+                  className="mb-3 texto-blanco-forzado"
+                  style={{
+                    maxWidth: '640px',
+                    textShadow: '0 1px 6px rgba(0, 0, 0, 0.8)'
+                  }}
+                >
+                  Responde 10 preguntas rápidas sobre tu estilo, tus planes y tu vibra, y
+                  nuestro algoritmo encontrará el perfume de nuestro catálogo que mejor conecta
+                  contigo.
+                </p>
+
+                <div className="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3 small">
+                  <span className="fw-semibold texto-blanco-forzado">
+                    <i className="fa-solid fa-clock me-1 texto-blanco-forzado" aria-hidden="true"></i>
+                    Toma menos de 1 minuto
+                  </span>
+                  <span className="fw-semibold texto-blanco-forzado">
+                    <i
+                      className="fa-solid fa-sparkles me-1 texto-blanco-forzado"
+                      aria-hidden="true"
+                    ></i>
+                    Descubre tu arquetipo olfativo
+                  </span>
+                  <span className="fw-semibold texto-blanco-forzado">
+                    <i
+                      className="fa-solid fa-percent me-1 texto-blanco-forzado"
+                      aria-hidden="true"
+                    ></i>
+                    Porcentaje de compatibilidad real
+                  </span>
+                </div>
+              </div>
+
+              <div className="col-12 col-lg-4 text-center text-lg-end">
+                <Link
+                  to="/match"
+                  className="btn btn-warning btn-lg rounded-pill fw-bold px-4 py-3 shadow"
+                  style={{ color: '#162018' }}
+                >
+                  <i className="fa-solid fa-wand-magic-sparkles me-2" aria-hidden="true"></i>
+                  Hacer el Test Ahora
+                </Link>
               </div>
             </div>
           </div>
@@ -579,7 +684,7 @@ export function Catalogo({ productos = [], agregarAlCarrito }) {
         >
           <div className="mb-4 text-center">
             <h3 id="titulo-testimonios" className="fw-bold text-dark mb-1">
-              Clientes Felices
+              Clientes Satisfechos
             </h3>
             <p className="text-muted small m-0">
               La confianza y satisfacción de nuestra comunidad nos avala
@@ -713,7 +818,13 @@ export function Catalogo({ productos = [], agregarAlCarrito }) {
         </section>
       </main>
 
-      <PreguntasFrecuentes />
+      <BannerLanzamiento productos={productos} />
+
+      <SuscripcionNewsletter />
+
+      <div className="sin-margen-superior">
+        <PreguntasFrecuentes />
+      </div>
     </>
   );
 }

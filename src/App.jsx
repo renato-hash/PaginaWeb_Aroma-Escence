@@ -26,6 +26,7 @@ import { Carrito } from './pages/Carrito';
 import { Checkout } from './pages/Checkout';
 import { PagoExitoso } from './pages/PagoExitoso';
 import { Ofertas } from './pages/Ofertas';
+import { PerfumeMatch } from './pages/PerfumeMatch';
 import { Admin } from './pages/Admin';
 import { Login } from './pages/Login';
 import { AdminLogin } from './pages/AdminLogin';
@@ -46,19 +47,42 @@ function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const normalizarImagen = (prod) => ({
+    ...prod,
+    imagen:
+      typeof prod.imagen === 'string'
+        ? prod.imagen.replace(/^public\//, '/')
+        : prod.imagen
+  });
+
   const [productos, setProductos] = useState(() => {
     const guardados = localStorage.getItem('aroma_productos_v17');
     if (guardados) {
       try {
         const parsed = JSON.parse(guardados);
-        return Array.isArray(parsed)
-          ? parsed.filter((p) => Number(p.precio) > 0)
-          : productosIniciales;
+        if (Array.isArray(parsed)) {
+          const validos = parsed
+            .filter((p) => Number(p.precio) > 0)
+            .map(normalizarImagen);
+          const idsExistentes = new Set(validos.map((p) => p.id));
+          const nombresExistentes = new Set(
+            validos.map((p) => p.nombre?.toLowerCase().trim())
+          );
+          const nuevos = productosIniciales
+            .filter(
+              (p) =>
+                !idsExistentes.has(p.id) &&
+                !nombresExistentes.has(p.nombre?.toLowerCase().trim())
+            )
+            .map(normalizarImagen);
+          return [...validos, ...nuevos];
+        }
+        return productosIniciales.map(normalizarImagen);
       } catch (e) {
-        return productosIniciales;
+        return productosIniciales.map(normalizarImagen);
       }
     }
-    return productosIniciales;
+    return productosIniciales.map(normalizarImagen);
   });
 
   const [carrito, setCarrito] = useState(() => {
@@ -107,17 +131,29 @@ function AppContent() {
   const [busqueda, setBusqueda] = useState('');
   const [mensajeToast, setMensajeToast] = useState('');
 
-  // Sincroniza el catálogo real desde Spring Boot al cargar la aplicación
   useEffect(() => {
     const cargarProductosBackend = async () => {
       try {
         const listaBackend = await obtenerProductosApi();
         if (Array.isArray(listaBackend) && listaBackend.length > 0) {
-          setProductos(listaBackend.filter((p) => Number(p.precio) > 0));
+          const validosBackend = listaBackend
+            .filter((p) => Number(p.precio) > 0)
+            .map(normalizarImagen);
+          const idsBackend = new Set(validosBackend.map((p) => p.id));
+          const nombresBackend = new Set(
+            validosBackend.map((p) => p.nombre?.toLowerCase().trim())
+          );
+          const lanzamientosLocales = productosIniciales
+            .filter(
+              (p) =>
+                p.id > 36 &&
+                !idsBackend.has(p.id) &&
+                !nombresBackend.has(p.nombre?.toLowerCase().trim())
+            )
+            .map(normalizarImagen);
+          setProductos([...validosBackend, ...lanzamientosLocales]);
         }
-      } catch (error) {
-        // Si el backend aún no está encendido, mantiene los productos locales
-      }
+      } catch (error) {}
     };
     cargarProductosBackend();
   }, []);
@@ -427,9 +463,7 @@ function AppContent() {
   const eliminarProducto = async (id) => {
     try {
       await eliminarProductoApi(id);
-    } catch (error) {
-      // Si falla conexión o era solo local, continúa limpiando el estado
-    }
+    } catch (error) {}
     setProductos((prev) => prev.filter((p) => p.id !== id));
     mostrarNotificacion('Producto eliminado.');
   };
@@ -497,6 +531,10 @@ function AppContent() {
         <Route
           path="/ofertas"
           element={<Ofertas productos={productos} agregarAlCarrito={agregarAlCarrito} />}
+        />
+        <Route
+          path="/match"
+          element={<PerfumeMatch productos={productos} agregarAlCarrito={agregarAlCarrito} />}
         />
         <Route
           path="/carrito"

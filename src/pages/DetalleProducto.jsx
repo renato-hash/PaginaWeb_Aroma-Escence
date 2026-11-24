@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const COLORES_ACORDES = {
@@ -41,6 +41,7 @@ const COLORES_ACORDES = {
 export function DetalleProducto({ productos = [], agregarAlCarrito }) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const piramideRef = useRef(null);
 
   const producto = productos.find(
     (p) => String(p.id) === String(id) || String(id).startsWith(`${p.id}-`)
@@ -55,6 +56,17 @@ export function DetalleProducto({ productos = [], agregarAlCarrito }) {
     } else {
       setTamanoSeleccionado(null);
     }
+  }, [producto]);
+
+  useEffect(() => {
+    const contenedor = piramideRef.current;
+    if (!contenedor) return;
+
+    contenedor.querySelectorAll('.texto-piramide-negro').forEach((el) => {
+      el.style.setProperty('color', '#000000', 'important');
+      el.style.setProperty('-webkit-text-fill-color', '#000000', 'important');
+      el.style.setProperty('opacity', '1', 'important');
+    });
   }, [producto]);
 
   if (!producto) {
@@ -113,6 +125,16 @@ export function DetalleProducto({ productos = [], agregarAlCarrito }) {
 
   return (
     <main className="container my-5">
+      <style>{`
+        html body main .piramide-olfativa-negra .texto-piramide-negro,
+        html body main .piramide-olfativa-negra strong,
+        html body main .piramide-olfativa-negra div {
+          color: #000000 !important;
+          -webkit-text-fill-color: #000000 !important;
+          opacity: 1 !important;
+        }
+      `}</style>
+
       <section
         aria-labelledby="titulo-detalle-producto"
         className="card shadow-lg p-4 p-md-5 border-0 rounded-4 bg-white position-relative"
@@ -257,20 +279,32 @@ export function DetalleProducto({ productos = [], agregarAlCarrito }) {
             </p>
 
             {producto.notas && (
-              <div className="card bg-light border-0 rounded-4 p-3 mb-4">
-                <h6 className="fw-bold text-dark mb-2">
+              <div
+                ref={piramideRef}
+                className="piramide-olfativa-negra card bg-light border-0 rounded-4 p-3 mb-4"
+              >
+                <h6 className="fw-bold mb-2 texto-piramide-negro" style={{ color: '#000000' }}>
                   <i className="fa-solid fa-flask me-2 text-warning" aria-hidden="true"></i>
                   Pirámide Olfativa
                 </h6>
-                <div className="small text-muted">
-                  <div className="mb-1">
-                    <strong>Salida:</strong> {producto.notas.salida}
+                <div className="small texto-piramide-negro" style={{ color: '#000000' }}>
+                  <div className="mb-1 texto-piramide-negro" style={{ color: '#000000' }}>
+                    <strong className="texto-piramide-negro" style={{ color: '#000000' }}>
+                      Salida:
+                    </strong>{' '}
+                    {producto.notas.salida}
                   </div>
-                  <div className="mb-1">
-                    <strong>Corazón:</strong> {producto.notas.corazon}
+                  <div className="mb-1 texto-piramide-negro" style={{ color: '#000000' }}>
+                    <strong className="texto-piramide-negro" style={{ color: '#000000' }}>
+                      Corazón:
+                    </strong>{' '}
+                    {producto.notas.corazon}
                   </div>
-                  <div>
-                    <strong>Fondo:</strong> {producto.notas.fondo}
+                  <div className="texto-piramide-negro" style={{ color: '#000000' }}>
+                    <strong className="texto-piramide-negro" style={{ color: '#000000' }}>
+                      Fondo:
+                    </strong>{' '}
+                    {producto.notas.fondo}
                   </div>
                 </div>
               </div>

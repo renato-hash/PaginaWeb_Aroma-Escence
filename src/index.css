@@ -413,3 +413,66 @@ select.form-select option {
 #root#root .table td :is(small, .small, .text-muted) {
   color: #e9ecef !important;
 }
+
+#root#root :is(.card, div, article, section):not(.bg-white):not(.bg-light):not(.product-card):has(form) :is(p, small, .small, .text-muted, .text-secondary, .form-text):not(.alert):not(.alert *):not(.invalid-feedback):not(.bg-light *) {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.navbar .dropdown-menu,
+#root#root .dropdown-menu {
+  background-color: #162018 !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+}
+
+.navbar .dropdown-item:not(.text-danger),
+#root#root .dropdown-item:not(.text-danger) {
+  color: #ffffff !important;
+}
+
+.navbar .dropdown-item:not(.text-danger):hover,
+.navbar .dropdown-item:not(.text-danger):focus,
+#root#root .dropdown-item:not(.text-danger):hover,
+#root#root .dropdown-item:not(.text-danger):focus {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.navbar .dropdown-item.text-danger:hover,
+#root#root .dropdown-item.text-danger:hover {
+  background-color: rgba(220, 53, 69, 0.18) !important;
+}
+#root#root :is(.carousel, .carousel-item, .carousel-caption, header, .hero, .banner) :is(p, .lead, .text-muted, .text-secondary, small, span:not(.badge):not(.btn)),
+#root#root :is(section, div):not(.card):not(.bg-white):not(.bg-light):not(.product-card):not(.accordion):not([style*="245, 245, 245"]):not([style*="#f5f5f5"]):not([style*="234, 244, 237"]):not([style*="#eaf4ed"]):has(> h1, > h2, > div > h1, > div > h2, > .row h1, > .row h2) :is(p, .lead, .text-muted):not(.card p):not(.bg-white p):not(.bg-light p):not(.product-card p):not(.accordion p):not(.alert p) {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.38) !important;
+  opacity: 1 !important;
+}
+
+input:focus::placeholder,
+textarea:focus::placeholder,
+input[type="password"]::placeholder {
+  color: transparent !important;
+}
+#root#root input[type="password"]::placeholder,
+#root#root input[type="password"]::-webkit-input-placeholder,
+#root#root .form-control[type="password"]::placeholder,
+#root#root .form-control[type="password"]::-webkit-input-placeholder {
+  color: transparent !important;
+  opacity: 0 !important;
+  -webkit-text-fill-color: transparent !important;
+}
+.sin-margen-superior > * {
+  margin-top: 0 !important;
+}
+.sin-margen-superior > * {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.sin-margen-superior + *,
+.sin-margen-superior + * > footer {
+  margin-top: 0 !important;
+}

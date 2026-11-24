@@ -34,11 +34,12 @@ export function Navbar({
 
   return (
     <header>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <div className="container">
-          <Link className="navbar-brand fw-bold text-warning" to="/">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-2">
+        <div className="container-fluid px-3 px-xl-5">
+          <Link className="navbar-brand fw-bold text-warning text-nowrap me-3" to="/">
             Aroma &amp; Esencia
           </Link>
+
           <button
             className="navbar-toggler"
             type="button"
@@ -52,35 +53,40 @@ export function Navbar({
           </button>
 
           <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-1">
               <li className="nav-item">
-                <Link className="nav-link" to="/">
+                <Link className="nav-link text-nowrap px-2" to="/">
                   Inicio
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/productos">
+                <Link className="nav-link text-nowrap px-2" to="/productos">
                   Catálogo
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/categorias">
+                <Link className="nav-link text-nowrap px-2" to="/categorias">
                   Categorías
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/ofertas">
+                <Link className="nav-link text-nowrap px-2" to="/ofertas">
                   Ofertas
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/nosotros">
+                <Link className="nav-link text-nowrap px-2" to="/match">
+                  Perfume Match
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link text-nowrap px-2" to="/nosotros">
                   Nosotros
                 </Link>
               </li>
               {esOperadorActivo && (
                 <li className="nav-item">
-                  <Link className="nav-link text-warning fw-bold" to="/admin">
+                  <Link className="nav-link text-warning fw-bold text-nowrap px-2" to="/admin">
                     <i className="fa-solid fa-screwdriver-wrench me-1" aria-hidden="true"></i>
                     Panel Admin
                   </Link>
@@ -88,8 +94,8 @@ export function Navbar({
               )}
             </ul>
 
-            <div className="d-flex align-items-center gap-2">
-              <div className="me-2">
+            <div className="d-flex flex-wrap flex-lg-nowrap align-items-center gap-2 mt-2 mt-lg-0">
+              <div style={{ width: '175px' }}>
                 <input
                   type="search"
                   className="form-control form-control-sm"
@@ -103,11 +109,11 @@ export function Navbar({
               {!esOperadorActivo && (
                 <Link
                   to="/carrito"
-                  className="btn btn-outline-light position-relative me-2 d-inline-flex align-items-center"
+                  className="btn btn-outline-light btn-sm position-relative d-inline-flex align-items-center justify-content-center px-2"
                   aria-label="Ver carrito de compras"
+                  title="Carrito de compras"
                 >
-                  <i className="fa-solid fa-cart-shopping me-2" aria-hidden="true"></i>
-                  <span>Carrito</span>
+                  <i className="fa-solid fa-cart-shopping" aria-hidden="true"></i>
                   {cantidadCarrito > 0 && (
                     <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                       {cantidadCarrito}
@@ -120,7 +126,7 @@ export function Navbar({
                 (esOperadorActivo ? (
                   <div className="dropdown">
                     <button
-                      className="btn btn-dark border-warning text-warning dropdown-toggle"
+                      className="btn btn-dark border-warning text-warning btn-sm text-nowrap dropdown-toggle d-inline-flex align-items-center"
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
@@ -149,7 +155,10 @@ export function Navbar({
                     </ul>
                   </div>
                 ) : (
-                  <Link to="/admin-login" className="btn btn-outline-warning btn-sm me-1">
+                  <Link
+                    to="/admin-login"
+                    className="btn btn-outline-warning btn-sm text-nowrap d-inline-flex align-items-center"
+                  >
                     <i className="fa-solid fa-user-shield me-1" aria-hidden="true"></i>
                     Portal Personal
                   </Link>
@@ -159,7 +168,7 @@ export function Navbar({
                 (usuario ? (
                   <div className="dropdown">
                     <button
-                      className="btn btn-secondary dropdown-toggle"
+                      className="btn btn-secondary btn-sm text-nowrap dropdown-toggle d-inline-flex align-items-center"
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
@@ -180,7 +189,10 @@ export function Navbar({
                     </ul>
                   </div>
                 ) : (
-                  <Link to="/login" className="btn btn-warning text-dark fw-bold btn-sm">
+                  <Link
+                    to="/login"
+                    className="btn btn-warning text-dark fw-bold btn-sm text-nowrap d-inline-flex align-items-center"
+                  >
                     <i className="fa-solid fa-right-to-bracket me-1" aria-hidden="true"></i>
                     Iniciar Sesión
                   </Link>
