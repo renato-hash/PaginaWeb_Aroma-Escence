@@ -493,10 +493,9 @@ const normalizarRutaImagen = (ruta) => {
 const IMAGEN_RESPALDO =
   'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600';
 
-// Genera un número pseudoaleatorio estable dentro de la misma sesión de resultados
 const ruidoControlado = (semilla, idProducto) => {
   const x = Math.sin((semilla + 1) * 9973 + (Number(idProducto) || 1) * 7919) * 10000;
-  return x - Math.floor(x); // Valor entre 0 y 1
+  return x - Math.floor(x);
 };
 
 export function PerfumeMatch({ productos = [], agregarAlCarrito }) {
@@ -596,7 +595,6 @@ export function PerfumeMatch({ productos = [], agregarAlCarrito }) {
     Object.entries(PALABRAS_PERFIL).forEach(([tipo, listaPalabras]) => {
       listaPalabras.forEach((palabra) => {
         const pNorm = normalizarTexto(palabra);
-        // Los acordes principales pesan mucho más que una palabra suelta en la descripción
         if (acordesNorm.some((ac) => ac.includes(pNorm))) {
           perfil[tipo] += 3;
         } else if (textoBase.includes(pNorm)) {
@@ -632,14 +630,12 @@ export function PerfumeMatch({ productos = [], agregarAlCarrito }) {
 
       const perfilPerfume = detectarPerfilPerfume(prod);
 
-      // 1. Afinidad entre los arquetipos elegidos por el usuario y el ADN real del perfume
       let puntosAfinidad = 0;
       Object.entries(conteoUsuario).forEach(([tipo, cantidad]) => {
         const proporcionUsuario = cantidad / totalRespuestas;
         puntosAfinidad += proporcionUsuario * perfilPerfume[tipo] * 28;
       });
 
-      // 2. Penalización por perfiles opuestos para evitar que perfumes pesados ganen siempre
       let penalizacion = 0;
       if (conteoUsuario.fresco >= 4 && perfilPerfume.exotico + perfilPerfume.dulce > 0.55) {
         penalizacion += 12;
@@ -651,7 +647,6 @@ export function PerfumeMatch({ productos = [], agregarAlCarrito }) {
         penalizacion += 7;
       }
 
-      // 3. Coincidencias por pregunta con TOPE (máximo 1 acierto fuerte por pregunta)
       let puntosKeywords = 0;
       const coincidencias = new Set();
 
@@ -677,7 +672,6 @@ export function PerfumeMatch({ productos = [], agregarAlCarrito }) {
         puntosKeywords += aciertoEnPregunta;
       });
 
-      // 4. Variación controlada para dar diversidad real entre perfumes compatibles
       const factorAleatorio = ruidoControlado(semillaVariedad, prod.id) * 6.5;
 
       const puntosTotales = Math.max(
@@ -699,7 +693,6 @@ export function PerfumeMatch({ productos = [], agregarAlCarrito }) {
 
     puntuados.sort((a, b) => b.puntos - a.puntos);
 
-    // Seleccionar Top 3 intentando que las alternativas sean de marcas variadas si hay empate cercano
     const seleccionados = [];
     const marcasUsadas = new Set();
 
@@ -718,7 +711,6 @@ export function PerfumeMatch({ productos = [], agregarAlCarrito }) {
       if (seleccionados.length === 3) break;
     }
 
-    // Rellenar si faltara alguno para completar 3
     for (const candidato of puntuados) {
       if (seleccionados.length === 3) break;
       if (!seleccionados.some((s) => s.producto.id === candidato.producto.id)) {
@@ -748,6 +740,32 @@ export function PerfumeMatch({ productos = [], agregarAlCarrito }) {
       return Number(prod.tamanos[0].stock ?? 0);
     }
     return Number(prod.stock ?? 0);
+  };
+
+  const obtenerNotasMatch = (prod) => {
+    if (!prod) return { acordes: [], piramide: [] };
+
+    const enIniciales = productosIniciales.find(
+      (p) =>
+        p.id === prod.id ||
+        p.nombre?.toLowerCase().trim() === prod.nombre?.toLowerCase().trim()
+    );
+    const fuente = prod.acordes || prod.notas ? prod : enIniciales || prod;
+
+    const acordes = Array.isArray(fuente.acordes) ? fuente.acordes.slice(0, 4) : [];
+
+    const piramide = [];
+    if (fuente.notas?.salida) {
+      piramide.push({ etiqueta: 'Salida', valor: fuente.notas.salida });
+    }
+    if (fuente.notas?.corazon) {
+      piramide.push({ etiqueta: 'Corazón', valor: fuente.notas.corazon });
+    }
+    if (fuente.notas?.fondo) {
+      piramide.push({ etiqueta: 'Fondo', valor: fuente.notas.fondo });
+    }
+
+    return { acordes, piramide };
   };
 
   const resultados = mostrarResultado ? calcularMatches() : [];
@@ -939,8 +957,8 @@ export function PerfumeMatch({ productos = [], agregarAlCarrito }) {
             >
               <div className="row g-0 align-items-stretch">
                 <div
-                  className="col-12 col-md-5 bg-white p-4 d-flex align-items-center justify-content-center position-relative"
-                  style={{ minHeight: '340px' }}
+                  className="col-12 col-md-5 bg-white p-4 d-flex flex-column justify-content-between position-relative"
+                  style={{ minHeight: '360px' }}
                 >
                   <span
                     className="position-absolute top-0 start-0 m-3 badge rounded-pill bg-success px-3 py-2 fs-6 shadow-sm"
@@ -952,16 +970,69 @@ export function PerfumeMatch({ productos = [], agregarAlCarrito }) {
 
                   <Link
                     to={`/producto/${matchPrincipal.producto.id}`}
-                    className="d-flex align-items-center justify-content-center w-100 h-100"
+                    className="d-flex align-items-center justify-content-center w-100 my-auto pt-4 pb-3"
                   >
                     <img
                       src={obtenerImagenPerfume(matchPrincipal.producto)}
                       alt={matchPrincipal.producto.nombre}
                       className="img-fluid"
-                      style={{ maxHeight: '290px', objectFit: 'contain' }}
+                      style={{ maxHeight: '240px', objectFit: 'contain' }}
                       onError={(e) => manejarErrorImagenPerfume(e, matchPrincipal.producto)}
                     />
                   </Link>
+
+                  {(() => {
+                    const { acordes, piramide } = obtenerNotasMatch(matchPrincipal.producto);
+                    if (acordes.length === 0 && piramide.length === 0) return null;
+
+                    return (
+                      <div
+                        className="w-100 pt-3 border-top text-start"
+                        style={{ borderColor: '#e5e7eb' }}
+                      >
+                        <div
+                          className="small fw-bold text-uppercase mb-2 d-flex align-items-center gap-1"
+                          style={{ color: '#162018', fontSize: '0.74rem', letterSpacing: '0.05em' }}
+                        >
+                          <i className="fa-solid fa-droplet text-success" aria-hidden="true"></i>
+                          <span>Notas de tu Match</span>
+                        </div>
+
+                        {acordes.length > 0 && (
+                          <div className="d-flex flex-wrap gap-1 mb-2">
+                            {acordes.map((acorde, idx) => (
+                              <span
+                                key={idx}
+                                className="badge rounded-pill px-2 py-1 fw-semibold text-capitalize"
+                                style={{
+                                  backgroundColor: '#eaf4ed',
+                                  color: '#162018',
+                                  border: '1px solid #a3d9b1',
+                                  fontSize: '0.72rem'
+                                }}
+                              >
+                                {acorde}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
+                        {piramide.length > 0 && (
+                          <div className="d-flex flex-column gap-1 mt-1">
+                            {piramide.map((nivel) => (
+                              <div
+                                key={nivel.etiqueta}
+                                style={{ fontSize: '0.76rem', color: '#374151', lineHeight: 1.3 }}
+                              >
+                                <strong style={{ color: '#111827' }}>{nivel.etiqueta}:</strong>{' '}
+                                <span>{nivel.valor}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
 
                 <div className="col-12 col-md-7 p-4 p-lg-5" style={{ color: '#000000' }}>

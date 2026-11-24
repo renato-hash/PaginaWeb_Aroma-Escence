@@ -1,8 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const ENVIO_GRATIS_DESDE = 60000;
 const VALOR_ENVIO = 4990;
+const KEY_PREMIO_ACTIVO = 'aroma_premio_ruleta';
+const KEY_CUPON_APLICADO = 'aroma_cupon_aplicado';
+
+const leerPremioDisponible = () => {
+  try {
+    const guardado = localStorage.getItem(KEY_PREMIO_ACTIVO);
+    if (!guardado) return null;
+    const parsed = JSON.parse(guardado);
+    if (parsed && parsed.usado !== true && parsed.tipo !== 'nada') return parsed;
+    return null;
+  } catch (e) {
+    return null;
+  }
+};
+
+const leerCuponAplicado = () => {
+  try {
+    const guardado = localStorage.getItem(KEY_CUPON_APLICADO);
+    if (!guardado) return null;
+    const parsed = JSON.parse(guardado);
+    const premioActivo = leerPremioDisponible();
+    if (parsed && premioActivo && parsed.codigo === premioActivo.codigo) {
+      return parsed;
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+};
 
 export function Carrito({
   carrito = [],
@@ -13,6 +42,79 @@ export function Carrito({
   mostrarNotificacion
 }) {
   const navigate = useNavigate();
+  const cuponInputRef = useRef(null);
+
+  const [premioDisponible, setPremioDisponible] = useState(leerPremioDisponible);
+  const [cuponAplicado, setCuponAplicado] = useState(leerCuponAplicado);
+  const [codigoInput, setCodigoInput] = useState(() => leerCuponAplicado()?.codigo || '');
+  const [mensajeCupon, setMensajeCupon] = useState({ tipo: '', texto: '' });
+
+  useEffect(() => {
+    const sincronizar = () => {
+      const disp = leerPremioDisponible();
+      setPremioDisponible(disp);
+      const apl = leerCuponAplicado();
+      setCuponAplicado(apl);
+    };
+    window.addEventListener('storage', sincronizar);
+    const intervalo = setInterval(sincronizar, 1000);
+    return () => {
+      window.removeEventListener('storage', sincronizar);
+      clearInterval(intervalo);
+    };
+  }, []);
+
+  useEffect(() => {
+    const el = cuponInputRef.current;
+    if (el) {
+      el.style.setProperty('color', '#000000', 'important');
+      el.style.setProperty('-webkit-text-fill-color', '#000000', 'important');
+      el.style.setProperty('background-color', '#ffffff', 'important');
+    }
+  }, [codigoInput, cuponAplicado]);
+
+  const handleAplicarCupon = (codigoManual = null) => {
+    const codigoAValidar = (codigoManual ?? codigoInput).trim().toUpperCase();
+    if (!codigoAValidar) {
+      setMensajeCupon({ tipo: 'error', texto: 'Ingresa un código de cupón.' });
+      return;
+    }
+
+    const premio = leerPremioDisponible();
+    if (!premio) {
+      setMensajeCupon({
+        tipo: 'error',
+        texto: 'No tienes cupones disponibles en esta cuenta o ya fue utilizado.'
+      });
+      return;
+    }
+
+    if (premio.codigo?.toUpperCase() !== codigoAValidar) {
+      setMensajeCupon({
+        tipo: 'error',
+        texto: 'El código ingresado no es válido para tu cuenta.'
+      });
+      return;
+    }
+
+    localStorage.setItem(KEY_CUPON_APLICADO, JSON.stringify(premio));
+    setCuponAplicado(premio);
+    setCodigoInput(premio.codigo);
+    setMensajeCupon({
+      tipo: 'exito',
+      texto: `¡Cupón ${premio.codigo} (${premio.texto}) aplicado correctamente!`
+    });
+    if (mostrarNotificacion) {
+      mostrarNotificacion(`¡Cupón ${premio.codigo} aplicado!`);
+    }
+  };
+
+  const handleQuitarCupon = () => {
+    localStorage.removeItem(KEY_CUPON_APLICADO);
+    setCuponAplicado(null);
+    setCodigoInput('');
+    setMensajeCupon({ tipo: '', texto: '' });
+  };
 
   // Sincroniza cada ítem del carrito con el catálogo real (incluyendo tamaños ml)
   const itemsValidados = carrito.map((item) => {
@@ -63,9 +165,29 @@ export function Carrito({
     0
   );
 
-  const costoEnvio = subtotal > 0 && subtotal < ENVIO_GRATIS_DESDE ? VALOR_ENVIO : 0;
-  const total = subtotal + costoEnvio;
-  const faltaParaEnvioGratis = Math.max(0, ENVIO_GRATIS_DESDE - subtotal);
+  // Cálculo del descuento solo si el cupón fue validado y aplicado
+  const porcentajeDescuento =
+    cuponAplicado?.tipo === 'porcentaje' && Number(cuponAplicado.valor) > 0
+      ? Number(cuponAplicado.valor)
+      : 0;
+
+  const montoDescuento =
+    porcentajeDescuento > 0 ? Math.round((subtotal * porcentajeDescuento) / 100) : 0;
+
+  const subtotalConDescuento = Math.max(0, subtotal - montoDescuento);
+
+  const tieneEnvioGratisPorCupon = cuponAplicado?.tipo === 'envio_gratis';
+  const costoEnvio =
+    subtotalConDescuento > 0 &&
+    subtotalConDescuento < ENVIO_GRATIS_DESDE &&
+    !tieneEnvioGratisPorCupon
+      ? VALOR_ENVIO
+      : 0;
+
+  const total = subtotalConDescuento + costoEnvio;
+  const faltaParaEnvioGratis = tieneEnvioGratisPorCupon
+    ? 0
+    : Math.max(0, ENVIO_GRATIS_DESDE - subtotalConDescuento);
 
   const cantidadTotalUnidades = itemsValidados.reduce((acc, item) => acc + item.cantidad, 0);
   const hayErroresEnCarrito = itemsValidados.some((item) => !item.esValido);
@@ -254,15 +376,96 @@ export function Carrito({
                 <div className="card-body">
                   <h5 className="card-title fw-bold">Resumen de Boleta</h5>
                   <hr />
+
+                  {/* Sección interactiva de Cupón de Descuento */}
+                  <div className="mb-3 p-3 rounded-3 border border-secondary">
+                    <label htmlFor="input-cupon-carrito" className="form-label small fw-bold mb-2">
+                      🎟️ ¿Tienes un cupón de descuento?
+                    </label>
+
+                    {!cuponAplicado ? (
+                      <>
+                        <div className="input-group input-group-sm">
+                          <input
+                            ref={cuponInputRef}
+                            id="input-cupon-carrito"
+                            type="text"
+                            className="form-control text-uppercase fw-bold"
+                            placeholder="Ej: AROMA15-123"
+                            value={codigoInput}
+                            onChange={(e) => {
+                              setCodigoInput(e.target.value.toUpperCase());
+                              if (mensajeCupon.texto) setMensajeCupon({ tipo: '', texto: '' });
+                            }}
+                          />
+                          <button
+                            type="button"
+                            className="btn btn-warning text-dark fw-bold"
+                            onClick={() => handleAplicarCupon()}
+                          >
+                            Aplicar
+                          </button>
+                        </div>
+
+                        {premioDisponible?.codigo && (
+                          <div className="mt-2 d-flex justify-content-between align-items-center">
+                            <small className="text-warning">
+                              Cupón ganado: <strong>{premioDisponible.codigo}</strong>
+                            </small>
+                            <button
+                              type="button"
+                              className="btn btn-link btn-sm p-0 text-warning fw-bold"
+                              onClick={() => handleAplicarCupon(premioDisponible.codigo)}
+                            >
+                              Usar ahora
+                            </button>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div className="d-flex justify-content-between align-items-center bg-success bg-opacity-25 border border-success rounded-2 px-2 py-1">
+                        <small className="text-success fw-bold">
+                          ✓ {cuponAplicado.codigo} ({cuponAplicado.texto})
+                        </small>
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-link text-danger p-0 fw-bold text-decoration-none"
+                          onClick={handleQuitarCupon}
+                        >
+                          Quitar
+                        </button>
+                      </div>
+                    )}
+
+                    {mensajeCupon.texto && (
+                      <small
+                        className={`d-block mt-1 fw-semibold ${
+                          mensajeCupon.tipo === 'error' ? 'text-danger' : 'text-success'
+                        }`}
+                      >
+                        {mensajeCupon.texto}
+                      </small>
+                    )}
+                  </div>
+
                   <div className="d-flex justify-content-between mb-2 text-muted">
                     <span>Productos ({cantidadTotalUnidades}):</span>
                     <span>${subtotal.toLocaleString('es-CL')}</span>
                   </div>
 
+                  {cuponAplicado && montoDescuento > 0 && (
+                    <div className="d-flex justify-content-between mb-2 text-success fw-bold">
+                      <span>Descuento ({cuponAplicado.codigo}):</span>
+                      <span>-${montoDescuento.toLocaleString('es-CL')}</span>
+                    </div>
+                  )}
+
                   <div className="d-flex justify-content-between mb-3">
                     <span>Envío:</span>
                     {costoEnvio === 0 ? (
-                      <span className="text-success fw-bold">GRATIS</span>
+                      <span className="text-success fw-bold">
+                        GRATIS {tieneEnvioGratisPorCupon ? `(${cuponAplicado.codigo})` : ''}
+                      </span>
                     ) : (
                       <span className="fw-semibold">
                         ${costoEnvio.toLocaleString('es-CL')}

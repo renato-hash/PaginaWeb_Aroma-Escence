@@ -1,30 +1,37 @@
-// src/pages/Ofertas.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function TarjetaOferta({ prod, agregarAlCarrito }) {
   const [tamanoSeleccionado, setTamanoSeleccionado] = useState(() => {
-    if (prod.tamanos && prod.tamanos.length > 0) {
-      return prod.tamanos.find((t) => t.ml === '100 ml') || prod.tamanos[0];
+    if (Array.isArray(prod.tamanos) && prod.tamanos.length > 0) {
+      return prod.tamanos[0];
     }
     return null;
   });
 
-  const precioBase = tamanoSeleccionado ? tamanoSeleccionado.precio : prod.precio;
-  
-  
-  const precioConDescuento = Math.floor((precioBase * 0.80) / 100) * 100 + 90;
+  const precioBase = Number(
+    tamanoSeleccionado ? tamanoSeleccionado.precio : prod.precio
+  );
+
+  const precioConDescuento = Math.floor((precioBase * 0.8) / 100) * 100 + 90;
+  const stockDisponible = Number(
+    tamanoSeleccionado ? tamanoSeleccionado.stock ?? 0 : prod.stock ?? 0
+  );
 
   const handleAprovechar = () => {
+    if (stockDisponible <= 0) return;
+
     const productoParaCarrito = {
       ...prod,
       id: tamanoSeleccionado ? `${prod.id}-${tamanoSeleccionado.ml}-oferta` : `${prod.id}-oferta`,
-      nombre: tamanoSeleccionado 
-        ? `${prod.nombre} (${tamanoSeleccionado.ml}) - 20% OFF` 
+      ml: tamanoSeleccionado ? tamanoSeleccionado.ml : null,
+      tamano: tamanoSeleccionado ? tamanoSeleccionado.ml : null,
+      nombre: tamanoSeleccionado
+        ? `${prod.nombre} (${tamanoSeleccionado.ml}) - 20% OFF`
         : `${prod.nombre} - 20% OFF`,
       precio: precioConDescuento,
       precioOriginal: precioBase,
-      stock: tamanoSeleccionado ? tamanoSeleccionado.stock : (prod.stock || 10)
+      stock: stockDisponible
     };
 
     agregarAlCarrito(productoParaCarrito);
@@ -33,33 +40,48 @@ function TarjetaOferta({ prod, agregarAlCarrito }) {
   return (
     <div className="col-12 col-md-6 col-lg-4">
       <div className="card h-100 shadow-sm product-card border-danger position-relative bg-white rounded-4 overflow-hidden">
-        
-        <span 
-          className="position-absolute top-0 end-0 bg-danger text-white fw-bold px-3 py-1 rounded-start mt-3 shadow-sm" 
+        <span
+          className="position-absolute top-0 end-0 bg-danger text-white fw-bold px-3 py-1 rounded-start mt-3 shadow-sm"
           style={{ zIndex: 5, fontSize: '0.85rem' }}
         >
           20% OFF
         </span>
 
-        <img
-          src={prod.imagen}
-          className="card-img-top p-3"
-          alt={prod.nombre}
-          style={{ height: '220px', objectFit: 'contain' }}
-          onError={(e) => {
-            e.target.src = 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600';
-          }}
-        />
+        <Link to={`/producto/${prod.id}`} className="text-decoration-none">
+          <img
+            src={prod.imagen}
+            className="card-img-top p-3"
+            alt={prod.nombre}
+            style={{ height: '220px', objectFit: 'contain' }}
+            onError={(e) => {
+              e.target.src =
+                'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600';
+            }}
+          />
+        </Link>
 
         <div className="card-body d-flex flex-column p-4">
-          <span className="badge bg-secondary mb-2 align-self-start">{prod.categoria || 'Perfumes'}</span>
-          <h5 className="fw-bold mb-1 text-dark">{prod.nombre}</h5>
-          <p className="text-muted small flex-grow-1 mb-3 text-truncate">{prod.descripcion}</p>
+          <span className="badge bg-secondary mb-2 align-self-start">
+            {prod.categoria || 'Perfumes'}
+          </span>
+          <h5 className="fw-bold mb-1" style={{ color: '#111827' }}>
+            {prod.nombre}
+          </h5>
+          <p className="small flex-grow-1 mb-3 text-truncate" style={{ color: '#4b5563' }}>
+            {prod.descripcion}
+          </p>
 
-          {prod.tamanos && prod.tamanos.length > 0 && (
+          {Array.isArray(prod.tamanos) && prod.tamanos.length > 0 && (
             <div className="mb-3">
-              <label className="form-label small fw-bold text-dark mb-1">Tamaño:</label>
+              <label
+                htmlFor={`tamano-oferta-${prod.id}`}
+                className="form-label small fw-bold mb-1"
+                style={{ color: '#111827' }}
+              >
+                Tamaño:
+              </label>
               <select
+                id={`tamano-oferta-${prod.id}`}
                 className="form-select form-select-sm rounded-3 fw-semibold border-secondary shadow-sm"
                 value={tamanoSeleccionado ? tamanoSeleccionado.ml : ''}
                 onChange={(e) => {
@@ -77,38 +99,45 @@ function TarjetaOferta({ prod, agregarAlCarrito }) {
           )}
 
           <div className="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
-            <div>
-              <span className="text-muted text-decoration-line-through small me-2">
-                ${precioBase.toLocaleString('es-CL')}
+            <div className="d-flex flex-column">
+              <span
+                className="text-decoration-line-through small fw-semibold"
+                style={{ color: '#6b7280', WebkitTextFillColor: '#6b7280' }}
+              >
+                Antes: ${precioBase.toLocaleString('es-CL')}
               </span>
-              <span className="fw-bold text-danger fs-5">
+              <span
+                className="fw-bold fs-5"
+                style={{ color: '#dc2626', WebkitTextFillColor: '#dc2626' }}
+              >
                 ${precioConDescuento.toLocaleString('es-CL')}
               </span>
             </div>
 
             <div className="d-flex gap-2">
-              <Link 
-                to={`/producto/${prod.id}`} 
-                className="btn btn-outline-dark btn-sm rounded-pill px-2"
+              <Link
+                to={`/producto/${prod.id}`}
+                className="btn btn-outline-dark btn-sm rounded-pill px-2 fw-semibold"
               >
                 Detalle
               </Link>
-              <button 
-                className="btn btn-danger btn-sm rounded-pill px-3 fw-bold shadow-sm" 
+              <button
+                type="button"
+                className="btn btn-danger btn-sm rounded-pill px-3 fw-bold shadow-sm"
                 onClick={handleAprovechar}
+                disabled={stockDisponible <= 0}
               >
-                + Aprovechar
+                {stockDisponible <= 0 ? 'Agotado' : '+ Aprovechar'}
               </button>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
 }
 
-export function Ofertas({ productos, agregarAlCarrito }) {
+export function Ofertas({ productos = [], agregarAlCarrito }) {
   const ofertas = productos.slice(0, 6);
 
   return (
@@ -120,11 +149,7 @@ export function Ofertas({ productos, agregarAlCarrito }) {
 
       <div className="row g-4">
         {ofertas.map((prod) => (
-          <TarjetaOferta 
-            key={prod.id} 
-            prod={prod} 
-            agregarAlCarrito={agregarAlCarrito} 
-          />
+          <TarjetaOferta key={prod.id} prod={prod} agregarAlCarrito={agregarAlCarrito} />
         ))}
       </div>
     </div>

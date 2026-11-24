@@ -16,6 +16,7 @@ import {
 import { Navbar } from './components/Navbar';
 import { Piepagina } from './components/Piepagina';
 import { Toast } from './components/Toast';
+import { RuletaDescuento } from './components/RuletaDescuento';
 import { Catalogo } from './pages/Catalogo';
 import { Productos } from './pages/Productos';
 import { Nosotros } from './pages/Nosotros';
@@ -480,6 +481,9 @@ function AppContent() {
   );
 
   const operadorValido = Boolean(usuarioAdmin && !usuario);
+  const esRutaAdmin =
+    location.pathname.startsWith('/admin') ||
+    location.pathname.startsWith('/admin-login');
 
   return (
     <>
@@ -621,6 +625,16 @@ function AppContent() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
+      {!esRutaAdmin && (
+        <RuletaDescuento
+          usuario={usuario}
+          onPremioGanado={(premio) => {
+            if (premio?.texto) {
+              mostrarNotificacion(`¡Premio activado: ${premio.texto}!`);
+            }
+          }}
+        />
+      )}
       <Piepagina />
       <Toast mensaje={mensajeToast} />
     </>

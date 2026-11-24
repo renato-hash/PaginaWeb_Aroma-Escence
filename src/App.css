@@ -273,3 +273,24 @@
   background-color: #f8f9fa !important;
   color: #111111 !important;
 }
+input,
+input:focus,
+textarea,
+textarea:focus,
+select,
+select:focus,
+.form-control,
+.form-control:focus,
+.form-select,
+.form-select:focus {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+input::placeholder,
+textarea::placeholder,
+.form-control::placeholder {
+  color: #6c757d !important;
+  -webkit-text-fill-color: #6c757d !important;
+  opacity: 1 !important;
+}

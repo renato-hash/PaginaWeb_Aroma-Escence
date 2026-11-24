@@ -1,14 +1,47 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 
 export function Productos({ productos = [], agregarAlCarrito }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const marcaUrl = searchParams.get('marca') || 'Todas';
+
   const [busqueda, setBusqueda] = useState('');
   const [categoriaActiva, setCategoriaActiva] = useState('Todas');
+  const [marcaActiva, setMarcaActiva] = useState(marcaUrl);
+
+  useEffect(() => {
+    setMarcaActiva(searchParams.get('marca') || 'Todas');
+  }, [searchParams]);
 
   const categorias = [
     'Todas',
     ...Array.from(new Set(productos.map((prod) => prod.categoria).filter(Boolean)))
   ];
+
+  const marcasDisponibles = [
+    'Todas',
+    ...Array.from(
+      new Set([
+        'Jean Paul Gaultier',
+        'Lattafa',
+        'Chanel',
+        'Maison Francis Kurkdjian',
+        'Dior',
+        'Jimmy Choo',
+        ...productos.map((prod) => prod.marca).filter(Boolean)
+      ])
+    )
+  ];
+
+  const seleccionarMarca = (marca) => {
+    setMarcaActiva(marca);
+    if (marca === 'Todas') {
+      searchParams.delete('marca');
+      setSearchParams(searchParams);
+    } else {
+      setSearchParams({ marca });
+    }
+  };
 
   const obtenerStockProducto = (prod) => {
     if (Array.isArray(prod.tamanos) && prod.tamanos.length > 0) {
@@ -20,18 +53,30 @@ export function Productos({ productos = [], agregarAlCarrito }) {
   const productosFiltrados = productos.filter((prod) => {
     const coincideCategoria =
       categoriaActiva === 'Todas' || prod.categoria === categoriaActiva;
+
+    const marcaBuscada = marcaActiva.toLowerCase();
+    const coincideMarca =
+      marcaActiva === 'Todas' ||
+      prod.marca?.toLowerCase().includes(marcaBuscada) ||
+      prod.nombre?.toLowerCase().includes(marcaBuscada) ||
+      prod.descripcion?.toLowerCase().includes(marcaBuscada);
+
     const texto = busqueda.toLowerCase();
     const coincideTexto =
       prod.nombre?.toLowerCase().includes(texto) ||
+      prod.marca?.toLowerCase().includes(texto) ||
       prod.descripcion?.toLowerCase().includes(texto);
-    return coincideCategoria && coincideTexto;
+
+    return coincideCategoria && coincideMarca && coincideTexto;
   });
 
   return (
     <main className="container my-4">
       <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-          <h1 className="fw-bold text-white mb-1">Catálogo Completo</h1>
+          <h1 className="fw-bold text-white mb-1">
+            {marcaActiva !== 'Todas' ? `Perfumes ${marcaActiva}` : 'Catálogo Completo'}
+          </h1>
           <p className="text-light opacity-75 small m-0">
             Mostrando {productosFiltrados.length} de {productos.length} fragancias disponibles
           </p>
@@ -41,7 +86,7 @@ export function Productos({ productos = [], agregarAlCarrito }) {
           <input
             type="search"
             className="form-control bg-dark text-white border-secondary rounded-pill px-3"
-            placeholder="Buscar perfume..."
+            placeholder="Buscar perfume o marca..."
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             aria-label="Buscar perfume"
@@ -49,14 +94,35 @@ export function Productos({ productos = [], agregarAlCarrito }) {
         </div>
       </div>
 
+      {/* Filtro rápido por Marcas */}
+      <div className="d-flex flex-wrap align-items-center gap-2 mb-3">
+        <span className="text-warning small fw-bold me-1">Marcas:</span>
+        {marcasDisponibles.map((marca) => (
+          <button
+            key={marca}
+            type="button"
+            className={`btn btn-sm rounded-pill fw-semibold px-3 ${
+              marcaActiva.toLowerCase() === marca.toLowerCase()
+                ? 'btn-warning text-dark'
+                : 'btn-outline-light'
+            }`}
+            onClick={() => seleccionarMarca(marca)}
+          >
+            {marca}
+          </button>
+        ))}
+      </div>
+
+      {/* Filtro por Categorías */}
       {categorias.length > 1 && (
-        <div className="d-flex flex-wrap gap-2 mb-4">
+        <div className="d-flex flex-wrap align-items-center gap-2 mb-4">
+          <span className="text-light opacity-75 small fw-bold me-1">Categorías:</span>
           {categorias.map((cat) => (
             <button
               key={cat}
               type="button"
               className={`btn btn-sm rounded-pill fw-semibold px-3 ${
-                categoriaActiva === cat ? 'btn-warning text-dark' : 'btn-outline-light'
+                categoriaActiva === cat ? 'btn-success text-white' : 'btn-outline-secondary text-light'
               }`}
               onClick={() => setCategoriaActiva(cat)}
             >
@@ -75,9 +141,10 @@ export function Productos({ productos = [], agregarAlCarrito }) {
             onClick={() => {
               setBusqueda('');
               setCategoriaActiva('Todas');
+              seleccionarMarca('Todas');
             }}
           >
-            Limpiar filtros
+            Ver todas las marcas y productos
           </button>
         </div>
       ) : (
@@ -105,9 +172,14 @@ export function Productos({ productos = [], agregarAlCarrito }) {
                     />
                   </Link>
                   <div className="card-body d-flex flex-column p-4">
-                    <span className="badge bg-secondary mb-2 align-self-start">
-                      {prod.categoria || 'Perfumes'}
-                    </span>
+                    <div className="d-flex flex-wrap gap-1 mb-2">
+                      <span className="badge bg-secondary">
+                        {prod.categoria || 'Perfumes'}
+                      </span>
+                      {prod.marca && (
+                        <span className="badge bg-dark text-warning">{prod.marca}</span>
+                      )}
+                    </div>
                     <h5 className="fw-bold mb-2">
                       <Link
                         to={`/producto/${prod.id}`}

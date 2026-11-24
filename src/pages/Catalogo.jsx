@@ -132,11 +132,11 @@ export function Catalogo({ productos = [], agregarAlCarrito }) {
   const productosDestacadosInicio = productos.slice(0, 3);
 
   const fotosVirales = [
-    'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=600'
+    '/images/the_most_wanted_parfum.webp',
+    '/images/The-Kingdom-for-Men-Eau-De-Parfum-100ml-Lattafa-Lattafa-32060017.webp',
+    '/images/stronger_intensely.webp',
+    '/images/versace_eros.webp',
+    '/images/scandal_parfum.jpg'
   ];
 
   const productosVirales = productos.slice(0, 5).map((prod, index) => ({

@@ -9,6 +9,9 @@ export function BannerLanzamiento({ productos = [] }) {
   );
 
   const rutaDestino = perfumeNuevo ? `/producto/${perfumeNuevo.id}` : '/producto/37';
+  const descripcionBanner =
+    perfumeNuevo?.descripcion ||
+    'Una fragancia intensa, envolvente y audaz de Carolina Herrera con notas dulces y florales diseñadas para dejar huella en cada ocasión.';
 
   const manejarErrorImagen = (e) => {
     const img = e.currentTarget;
@@ -66,7 +69,7 @@ export function BannerLanzamiento({ productos = [] }) {
             </h2>
 
             <div
-              className="px-4 py-2 rounded-pill fw-semibold mb-4"
+              className="px-4 py-2 rounded-pill fw-semibold mb-3"
               style={{
                 background: 'linear-gradient(90deg, #5e0b18 0%, #a3182d 100%)',
                 border: '1px solid rgba(255, 255, 255, 0.25)',
@@ -75,6 +78,21 @@ export function BannerLanzamiento({ productos = [] }) {
             >
               <span style={{ color: '#ffffff' }}>Dulcemente Irresistible</span>
             </div>
+
+            <p
+              className="mb-4"
+              style={{
+                color: '#ffffff',
+                WebkitTextFillColor: '#ffffff',
+                fontSize: '0.96rem',
+                lineHeight: 1.5,
+                maxWidth: '520px',
+                opacity: 0.92,
+                textShadow: '0 2px 10px rgba(0, 0, 0, 0.55)'
+              }}
+            >
+              {descripcionBanner}
+            </p>
 
             <span
               className="btn btn-light fw-bold rounded-pill px-4 py-2 shadow-sm"

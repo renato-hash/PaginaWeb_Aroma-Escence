@@ -4,6 +4,35 @@ import { crearPedidoApi } from '../services/api';
 
 const ENVIO_GRATIS_DESDE = 60000;
 const VALOR_ENVIO = 4990;
+const KEY_PREMIO_ACTIVO = 'aroma_premio_ruleta';
+const KEY_CUPON_APLICADO = 'aroma_cupon_aplicado';
+
+const leerPremioDisponible = () => {
+  try {
+    const guardado = localStorage.getItem(KEY_PREMIO_ACTIVO);
+    if (!guardado) return null;
+    const parsed = JSON.parse(guardado);
+    if (parsed && parsed.usado !== true && parsed.tipo !== 'nada') return parsed;
+    return null;
+  } catch (e) {
+    return null;
+  }
+};
+
+const leerCuponAplicado = () => {
+  try {
+    const guardado = localStorage.getItem(KEY_CUPON_APLICADO);
+    if (!guardado) return null;
+    const parsed = JSON.parse(guardado);
+    const premioActivo = leerPremioDisponible();
+    if (parsed && premioActivo && parsed.codigo === premioActivo.codigo) {
+      return parsed;
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+};
 
 const formatearRut = (valor) => {
   const limpio = valor.replace(/[^0-9kK]/g, '').toUpperCase().slice(0, 9);
@@ -50,6 +79,11 @@ export function Checkout({
   const navigate = useNavigate();
   const checkoutRef = useRef(null);
 
+  const [premioDisponible, setPremioDisponible] = useState(leerPremioDisponible);
+  const [cuponAplicado, setCuponAplicado] = useState(leerCuponAplicado);
+  const [codigoInput, setCodigoInput] = useState(() => leerCuponAplicado()?.codigo || '');
+  const [mensajeCupon, setMensajeCupon] = useState({ tipo: '', texto: '' });
+
   const regionesChile = [
     'Arica y Parinacota',
     'Tarapacá',
@@ -94,6 +128,19 @@ export function Checkout({
   const [procesando, setProcesando] = useState(false);
 
   useEffect(() => {
+    const sincronizar = () => {
+      setPremioDisponible(leerPremioDisponible());
+      setCuponAplicado(leerCuponAplicado());
+    };
+    window.addEventListener('storage', sincronizar);
+    const intervalo = setInterval(sincronizar, 1000);
+    return () => {
+      window.removeEventListener('storage', sincronizar);
+      clearInterval(intervalo);
+    };
+  }, []);
+
+  useEffect(() => {
     const contenedor = checkoutRef.current;
     if (!contenedor) return;
 
@@ -104,7 +151,58 @@ export function Checkout({
         el.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
         el.style.setProperty('opacity', '1', 'important');
       });
-  }, [carrito.length, metodoPago, errores]);
+
+    contenedor
+      .querySelectorAll('.form-control, .form-select')
+      .forEach((el) => {
+        el.style.setProperty('color', '#000000', 'important');
+        el.style.setProperty('-webkit-text-fill-color', '#000000', 'important');
+        el.style.setProperty('background-color', '#ffffff', 'important');
+      });
+  }, [carrito.length, metodoPago, errores, cuponAplicado, codigoInput]);
+
+  const handleAplicarCupon = (codigoManual = null) => {
+    const codigoAValidar = (codigoManual ?? codigoInput).trim().toUpperCase();
+    if (!codigoAValidar) {
+      setMensajeCupon({ tipo: 'error', texto: 'Ingresa un código de cupón.' });
+      return;
+    }
+
+    const premio = leerPremioDisponible();
+    if (!premio) {
+      setMensajeCupon({
+        tipo: 'error',
+        texto: 'No tienes cupones disponibles en esta cuenta o ya fue utilizado.'
+      });
+      return;
+    }
+
+    if (premio.codigo?.toUpperCase() !== codigoAValidar) {
+      setMensajeCupon({
+        tipo: 'error',
+        texto: 'El código ingresado no es válido para tu cuenta.'
+      });
+      return;
+    }
+
+    localStorage.setItem(KEY_CUPON_APLICADO, JSON.stringify(premio));
+    setCuponAplicado(premio);
+    setCodigoInput(premio.codigo);
+    setMensajeCupon({
+      tipo: 'exito',
+      texto: `¡Cupón ${premio.codigo} (${premio.texto}) aplicado correctamente!`
+    });
+    if (mostrarNotificacion) {
+      mostrarNotificacion(`¡Cupón ${premio.codigo} aplicado!`);
+    }
+  };
+
+  const handleQuitarCupon = () => {
+    localStorage.removeItem(KEY_CUPON_APLICADO);
+    setCuponAplicado(null);
+    setCodigoInput('');
+    setMensajeCupon({ tipo: '', texto: '' });
+  };
 
   const problemasStock = carrito.filter((item) => {
     const mlItem = item.ml || item.tamano || null;
@@ -129,8 +227,26 @@ export function Checkout({
     0
   );
 
-  const costoEnvio = subtotal > 0 && subtotal < ENVIO_GRATIS_DESDE ? VALOR_ENVIO : 0;
-  const total = subtotal + costoEnvio;
+  // Cálculo de beneficios solo si el cupón fue validado y aplicado
+  const porcentajeDescuento =
+    cuponAplicado?.tipo === 'porcentaje' && Number(cuponAplicado.valor) > 0
+      ? Number(cuponAplicado.valor)
+      : 0;
+
+  const montoDescuento =
+    porcentajeDescuento > 0 ? Math.round((subtotal * porcentajeDescuento) / 100) : 0;
+
+  const subtotalConDescuento = Math.max(0, subtotal - montoDescuento);
+
+  const tieneEnvioGratisPorCupon = cuponAplicado?.tipo === 'envio_gratis';
+  const costoEnvio =
+    subtotalConDescuento > 0 &&
+    subtotalConDescuento < ENVIO_GRATIS_DESDE &&
+    !tieneEnvioGratisPorCupon
+      ? VALOR_ENVIO
+      : 0;
+
+  const total = subtotalConDescuento + costoEnvio;
 
   const handleInputChange = (e) => {
     let { name, value } = e.target;
@@ -311,6 +427,8 @@ export function Checkout({
         cantidad: Number(item.cantidad)
       })),
       subtotal,
+      descuentoRuleta: montoDescuento,
+      cuponAplicado: cuponAplicado ? `${cuponAplicado.codigo} (${cuponAplicado.texto})` : null,
       costoEnvio,
       total
     };
@@ -345,14 +463,33 @@ export function Checkout({
         ordenFinal.numeroOrden = respuestaBackend.numeroOrden;
       }
     } catch (errorApi) {
-      // Si el backend respondió con error de stock o validación de negocio, se detiene aquí
       const msg = (errorApi.message || '').toLowerCase();
       if (msg.includes('stock') || msg.includes('insuficiente')) {
         setProcesando(false);
         setErrorGeneral(errorApi.message);
         return;
       }
-      // Si es error de red (backend apagado), continúa guardando el respaldo local
+    }
+
+    // Marca el cupón utilizado como canjeado una vez concretada la compra
+    if (cuponAplicado) {
+      const cuponUsado = { ...cuponAplicado, usado: true };
+      localStorage.setItem(KEY_PREMIO_ACTIVO, JSON.stringify(cuponUsado));
+      if (cuponAplicado.userKey) {
+        localStorage.setItem(
+          `aroma_premio_ruleta_${cuponAplicado.userKey}`,
+          JSON.stringify(cuponUsado)
+        );
+      }
+      if (cuponAplicado.email) {
+        localStorage.setItem(
+          `aroma_premio_ruleta_${cuponAplicado.email.toLowerCase()}`,
+          JSON.stringify(cuponUsado)
+        );
+      }
+      localStorage.removeItem(KEY_CUPON_APLICADO);
+      setCuponAplicado(null);
+      setPremioDisponible(null);
     }
 
     localStorage.setItem('aroma_ultima_orden', JSON.stringify(ordenFinal));
@@ -401,6 +538,21 @@ export function Checkout({
         html body main .form-select.is-invalid ~ .invalid-feedback {
           color: #ffffff !important;
           -webkit-text-fill-color: #ffffff !important;
+          opacity: 1 !important;
+        }
+
+        html body main .form-control,
+        html body main .form-control:focus,
+        html body main .form-select,
+        html body main .form-select:focus {
+          color: #000000 !important;
+          -webkit-text-fill-color: #000000 !important;
+          background-color: #ffffff !important;
+        }
+
+        html body main .form-control::placeholder {
+          color: #6c757d !important;
+          -webkit-text-fill-color: #6c757d !important;
           opacity: 1 !important;
         }
       `}</style>
@@ -804,6 +956,80 @@ export function Checkout({
                 >
                   Resumen del Pedido
                 </h4>
+
+                {/* Sección interactiva de Cupón de Descuento en Checkout */}
+                <div className="mb-3 p-3 rounded-3 border border-secondary">
+                  <label
+                    htmlFor="input-cupon-checkout"
+                    className="form-label small fw-bold mb-2 titulo-compra-blanco"
+                  >
+                    🎟️ ¿Tienes un cupón de descuento?
+                  </label>
+
+                  {!cuponAplicado ? (
+                    <>
+                      <div className="input-group input-group-sm">
+                        <input
+                          id="input-cupon-checkout"
+                          type="text"
+                          className="form-control text-uppercase fw-bold"
+                          placeholder="Ej: AROMA15-123"
+                          value={codigoInput}
+                          onChange={(e) => {
+                            setCodigoInput(e.target.value.toUpperCase());
+                            if (mensajeCupon.texto) setMensajeCupon({ tipo: '', texto: '' });
+                          }}
+                        />
+                        <button
+                          type="button"
+                          className="btn btn-warning text-dark fw-bold"
+                          onClick={() => handleAplicarCupon()}
+                        >
+                          Aplicar
+                        </button>
+                      </div>
+
+                      {premioDisponible?.codigo && (
+                        <div className="mt-2 d-flex justify-content-between align-items-center">
+                          <small className="text-warning">
+                            Cupón disponible: <strong>{premioDisponible.codigo}</strong>
+                          </small>
+                          <button
+                            type="button"
+                            className="btn btn-link btn-sm p-0 text-warning fw-bold"
+                            onClick={() => handleAplicarCupon(premioDisponible.codigo)}
+                          >
+                            Aplicar ahora
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="d-flex justify-content-between align-items-center bg-success bg-opacity-25 border border-success rounded-2 px-2 py-1">
+                      <small className="text-success fw-bold">
+                        ✓ {cuponAplicado.codigo} ({cuponAplicado.texto})
+                      </small>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-link text-danger p-0 fw-bold text-decoration-none"
+                        onClick={handleQuitarCupon}
+                      >
+                        Quitar
+                      </button>
+                    </div>
+                  )}
+
+                  {mensajeCupon.texto && (
+                    <small
+                      className={`d-block mt-1 fw-semibold ${
+                        mensajeCupon.tipo === 'error' ? 'text-warning' : 'text-success'
+                      }`}
+                    >
+                      {mensajeCupon.texto}
+                    </small>
+                  )}
+                </div>
+
                 <ul className="list-group list-group-flush mb-3">
                   {carrito.map((item) => {
                     const mlItem = item.ml || item.tamano || null;
@@ -835,6 +1061,17 @@ export function Checkout({
                     </span>
                   </li>
 
+                  {cuponAplicado && montoDescuento > 0 && (
+                    <li className="list-group-item d-flex justify-content-between align-items-center px-0">
+                      <span className="text-success fw-bold">
+                        Descuento ({cuponAplicado.codigo})
+                      </span>
+                      <span className="text-success fw-bold">
+                        -${montoDescuento.toLocaleString('es-CL')}
+                      </span>
+                    </li>
+                  )}
+
                   <li className="list-group-item d-flex justify-content-between align-items-center px-0">
                     <div>
                       <span>Envío a Domicilio</span>
@@ -845,7 +1082,9 @@ export function Checkout({
                       )}
                     </div>
                     {costoEnvio === 0 ? (
-                      <span className="text-success fw-bold">GRATIS</span>
+                      <span className="text-success fw-bold">
+                        GRATIS {tieneEnvioGratisPorCupon ? `(${cuponAplicado.codigo})` : ''}
+                      </span>
                     ) : (
                       <span className="fw-semibold titulo-compra-blanco" style={{ color: '#ffffff' }}>
                         ${costoEnvio.toLocaleString('es-CL')}
