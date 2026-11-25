@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { crearPedidoApi } from '../services/api';
+import { crearPedidoApi, validarCuponApi } from '../services/api';
 
 const ENVIO_GRATIS_DESDE = 60000;
 const VALOR_ENVIO = 4990;
@@ -83,6 +83,7 @@ export function Checkout({
   const [cuponAplicado, setCuponAplicado] = useState(leerCuponAplicado);
   const [codigoInput, setCodigoInput] = useState(() => leerCuponAplicado()?.codigo || '');
   const [mensajeCupon, setMensajeCupon] = useState({ tipo: '', texto: '' });
+  const [validandoCupon, setValidandoCupon] = useState(false);
 
   const regionesChile = [
     'Arica y Parinacota',
@@ -161,39 +162,63 @@ export function Checkout({
       });
   }, [carrito.length, metodoPago, errores, cuponAplicado, codigoInput]);
 
-  const handleAplicarCupon = (codigoManual = null) => {
+  const handleAplicarCupon = async (codigoManual = null) => {
     const codigoAValidar = (codigoManual ?? codigoInput).trim().toUpperCase();
     if (!codigoAValidar) {
       setMensajeCupon({ tipo: 'error', texto: 'Ingresa un código de cupón.' });
       return;
     }
 
-    const premio = leerPremioDisponible();
-    if (!premio) {
-      setMensajeCupon({
-        tipo: 'error',
-        texto: 'No tienes cupones disponibles en esta cuenta o ya fue utilizado.'
-      });
-      return;
-    }
+    const premioLocal = leerPremioDisponible();
+    const emailCuenta = usuario?.email || formData.email || premioLocal?.email || '';
 
-    if (premio.codigo?.toUpperCase() !== codigoAValidar) {
-      setMensajeCupon({
-        tipo: 'error',
-        texto: 'El código ingresado no es válido para tu cuenta.'
-      });
-      return;
-    }
+    setValidandoCupon(true);
+    try {
+      const cuponServidor = await validarCuponApi(codigoAValidar, emailCuenta);
+      const datosCupon = {
+        ...premioLocal,
+        ...cuponServidor,
+        email: cuponServidor.usuarioEmail || emailCuenta
+      };
 
-    localStorage.setItem(KEY_CUPON_APLICADO, JSON.stringify(premio));
-    setCuponAplicado(premio);
-    setCodigoInput(premio.codigo);
-    setMensajeCupon({
-      tipo: 'exito',
-      texto: `¡Cupón ${premio.codigo} (${premio.texto}) aplicado correctamente!`
-    });
-    if (mostrarNotificacion) {
-      mostrarNotificacion(`¡Cupón ${premio.codigo} aplicado!`);
+      localStorage.setItem(KEY_PREMIO_ACTIVO, JSON.stringify(datosCupon));
+      localStorage.setItem(KEY_CUPON_APLICADO, JSON.stringify(datosCupon));
+      setCuponAplicado(datosCupon);
+      setCodigoInput(datosCupon.codigo);
+      setMensajeCupon({
+        tipo: 'exito',
+        texto: `¡Cupón ${datosCupon.codigo} (${datosCupon.texto}) aplicado correctamente!`
+      });
+      if (mostrarNotificacion) {
+        mostrarNotificacion(`¡Cupón ${datosCupon.codigo} aplicado!`);
+      }
+    } catch (errorApi) {
+      const msg = (errorApi.message || '').toLowerCase();
+      if (
+        msg.includes('existe') ||
+        msg.includes('pertenece') ||
+        msg.includes('utilizado')
+      ) {
+        setMensajeCupon({ tipo: 'error', texto: errorApi.message });
+      } else if (premioLocal && premioLocal.codigo?.toUpperCase() === codigoAValidar) {
+        localStorage.setItem(KEY_CUPON_APLICADO, JSON.stringify(premioLocal));
+        setCuponAplicado(premioLocal);
+        setCodigoInput(premioLocal.codigo);
+        setMensajeCupon({
+          tipo: 'exito',
+          texto: `¡Cupón ${premioLocal.codigo} (${premioLocal.texto}) aplicado correctamente!`
+        });
+        if (mostrarNotificacion) {
+          mostrarNotificacion(`¡Cupón ${premioLocal.codigo} aplicado!`);
+        }
+      } else {
+        setMensajeCupon({
+          tipo: 'error',
+          texto: 'El código ingresado no es válido para tu cuenta.'
+        });
+      }
+    } finally {
+      setValidandoCupon(false);
     }
   };
 
@@ -227,7 +252,6 @@ export function Checkout({
     0
   );
 
-  // Cálculo de beneficios solo si el cupón fue validado y aplicado
   const porcentajeDescuento =
     cuponAplicado?.tipo === 'porcentaje' && Number(cuponAplicado.valor) > 0
       ? Number(cuponAplicado.valor)
@@ -433,7 +457,7 @@ export function Checkout({
       total
     };
 
-    // Envía el pedido al Backend Spring Boot con token JWT
+    // Envía el pedido al Backend Spring Boot (que también marca el cupón como usado en BD)
     let ordenFinal = { ...nuevaOrden, estado: 'Pendiente' };
     try {
       const payloadBackend = {
@@ -471,7 +495,6 @@ export function Checkout({
       }
     }
 
-    // Marca el cupón utilizado como canjeado una vez concretada la compra
     if (cuponAplicado) {
       const cuponUsado = { ...cuponAplicado, usado: true };
       localStorage.setItem(KEY_PREMIO_ACTIVO, JSON.stringify(cuponUsado));
@@ -957,7 +980,6 @@ export function Checkout({
                   Resumen del Pedido
                 </h4>
 
-                {/* Sección interactiva de Cupón de Descuento en Checkout */}
                 <div className="mb-3 p-3 rounded-3 border border-secondary">
                   <label
                     htmlFor="input-cupon-checkout"
@@ -983,9 +1005,10 @@ export function Checkout({
                         <button
                           type="button"
                           className="btn btn-warning text-dark fw-bold"
+                          disabled={validandoCupon}
                           onClick={() => handleAplicarCupon()}
                         >
-                          Aplicar
+                          {validandoCupon ? '...' : 'Aplicar'}
                         </button>
                       </div>
 
@@ -997,6 +1020,7 @@ export function Checkout({
                           <button
                             type="button"
                             className="btn btn-link btn-sm p-0 text-warning fw-bold"
+                            disabled={validandoCupon}
                             onClick={() => handleAplicarCupon(premioDisponible.codigo)}
                           >
                             Aplicar ahora

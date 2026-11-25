@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import {
+  obtenerEstadoRuletaApi,
+  registrarGiroRuletaApi
+} from '../services/api';
 
 const PREMIOS = [
   { texto: '15 % OFF', prefijo: 'AROMA15', tipo: 'porcentaje', valor: 15, color: '#f4c3b2', textoOscuro: true },
@@ -26,7 +30,7 @@ const generarCodigoCupon = (prefijo) => {
   return `${prefijo}-${sufijo}`;
 };
 
-const leerEstadoPorUsuario = (userKey) => {
+const leerEstadoLocal = (userKey) => {
   try {
     const giroKey = `aroma_ruleta_girada_${userKey}`;
     const premioKey = `aroma_premio_ruleta_${userKey}`;
@@ -52,25 +56,62 @@ export function RuletaDescuento({ usuario, onPremioGanado }) {
   const [errorEmail, setErrorEmail] = useState('');
   const [girando, setGirando] = useState(false);
   const [rotacion, setRotacion] = useState(0);
-  const [resultado, setResultado] = useState(() => leerEstadoPorUsuario(userKey));
+  const [resultado, setResultado] = useState(() => leerEstadoLocal(userKey));
   const [copiado, setCopiado] = useState(false);
   const modalRef = useRef(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
-    const estadoCuenta = leerEstadoPorUsuario(userKey);
-    setResultado(estadoCuenta);
-    setEmail(usuario?.email || '');
-    setErrorEmail('');
-    setRotacion(0);
-    setCopiado(false);
+    let cancelado = false;
 
-    if (estadoCuenta && estadoCuenta.tipo !== 'nada' && !estadoCuenta.usado) {
-      localStorage.setItem(KEY_PREMIO_ACTIVO, JSON.stringify(estadoCuenta));
-    } else {
-      localStorage.removeItem(KEY_PREMIO_ACTIVO);
-      localStorage.removeItem(KEY_CUPON_APLICADO);
-    }
+    const sincronizarConBackend = async () => {
+      const estadoLocal = leerEstadoLocal(userKey);
+      setResultado(estadoLocal);
+      setEmail(usuario?.email || '');
+      setErrorEmail('');
+      setRotacion(0);
+      setCopiado(false);
+
+      if (usuario?.email) {
+        try {
+          const dataApi = await obtenerEstadoRuletaApi(usuario.email);
+          if (cancelado) return;
+
+          if (dataApi && dataApi.participo !== false && dataApi.tipo) {
+            const datosNormalizados = {
+              ...dataApi,
+              email: dataApi.usuarioEmail || usuario.email,
+              userKey
+            };
+            setResultado(datosNormalizados);
+            localStorage.setItem(`aroma_ruleta_girada_${userKey}`, 'true');
+            localStorage.setItem(`aroma_premio_ruleta_${userKey}`, JSON.stringify(datosNormalizados));
+
+            if (datosNormalizados.tipo !== 'nada' && !datosNormalizados.usado) {
+              localStorage.setItem(KEY_PREMIO_ACTIVO, JSON.stringify(datosNormalizados));
+            } else {
+              localStorage.removeItem(KEY_PREMIO_ACTIVO);
+              localStorage.removeItem(KEY_CUPON_APLICADO);
+            }
+            return;
+          }
+        } catch (err) {
+          // Si el backend no responde, mantiene estadoLocal
+        }
+      }
+
+      if (estadoLocal && estadoLocal.tipo !== 'nada' && !estadoLocal.usado) {
+        localStorage.setItem(KEY_PREMIO_ACTIVO, JSON.stringify(estadoLocal));
+      } else {
+        localStorage.removeItem(KEY_PREMIO_ACTIVO);
+        localStorage.removeItem(KEY_CUPON_APLICADO);
+      }
+    };
+
+    sincronizarConBackend();
+    return () => {
+      cancelado = true;
+    };
   }, [userKey, usuario]);
 
   useEffect(() => {
@@ -131,7 +172,7 @@ export function RuletaDescuento({ usuario, onPremioGanado }) {
     setTimeout(() => setCopiado(false), 2500);
   };
 
-  const handleGirar = (e) => {
+  const handleGirar = async (e) => {
     e.preventDefault();
     if (girando || resultado) return;
 
@@ -148,6 +189,16 @@ export function RuletaDescuento({ usuario, onPremioGanado }) {
       return;
     }
 
+    // Verifica en el servidor antes de girar si el correo ya existe en BD
+    try {
+      const estadoServidor = await obtenerEstadoRuletaApi(emailLimpio);
+      if (estadoServidor && estadoServidor.participo !== false && estadoServidor.tipo) {
+        setErrorEmail('Este correo electrónico ya participó en la ruleta.');
+        localStorage.setItem(`aroma_ruleta_girada_${correoKey}`, 'true');
+        return;
+      }
+    } catch (err) {}
+
     setErrorEmail('');
     setGirando(true);
 
@@ -161,36 +212,48 @@ export function RuletaDescuento({ usuario, onPremioGanado }) {
 
     setRotacion(anguloFinal);
 
-    setTimeout(() => {
+    setTimeout(async () => {
       setGirando(false);
       localStorage.setItem(`aroma_ruleta_girada_${userKey}`, 'true');
       localStorage.setItem(`aroma_ruleta_girada_${correoKey}`, 'true');
 
-      if (premioSeleccionado.tipo !== 'nada') {
-        const codigoGenerado = generarCodigoCupon(premioSeleccionado.prefijo);
-        const datosPremio = {
-          ...premioSeleccionado,
-          codigo: codigoGenerado,
-          email: emailLimpio,
-          userKey,
-          usado: false,
-          fecha: new Date().toISOString()
-        };
-        setResultado(datosPremio);
-        localStorage.setItem(`aroma_premio_ruleta_${userKey}`, JSON.stringify(datosPremio));
-        localStorage.setItem(`aroma_premio_ruleta_${correoKey}`, JSON.stringify(datosPremio));
-        localStorage.setItem(KEY_PREMIO_ACTIVO, JSON.stringify(datosPremio));
+      const codigoGenerado =
+        premioSeleccionado.tipo !== 'nada'
+          ? generarCodigoCupon(premioSeleccionado.prefijo)
+          : null;
 
+      const datosPremio = {
+        ...premioSeleccionado,
+        codigo: codigoGenerado,
+        email: emailLimpio,
+        userKey,
+        usado: false,
+        fecha: new Date().toISOString()
+      };
+
+      // Persiste el resultado en Spring Boot
+      try {
+        await registrarGiroRuletaApi({
+          email: emailLimpio,
+          codigo: codigoGenerado,
+          texto: premioSeleccionado.texto,
+          tipo: premioSeleccionado.tipo,
+          valor: premioSeleccionado.valor
+        });
+      } catch (err) {
+        // Mantiene guardado local si el servidor no responde
+      }
+
+      setResultado(datosPremio);
+      localStorage.setItem(`aroma_premio_ruleta_${userKey}`, JSON.stringify(datosPremio));
+      localStorage.setItem(`aroma_premio_ruleta_${correoKey}`, JSON.stringify(datosPremio));
+
+      if (premioSeleccionado.tipo !== 'nada') {
+        localStorage.setItem(KEY_PREMIO_ACTIVO, JSON.stringify(datosPremio));
         if (onPremioGanado) {
           onPremioGanado(datosPremio);
         }
       } else {
-        const sinPremio = {
-          ...premioSeleccionado,
-          email: emailLimpio,
-          userKey
-        };
-        setResultado(sinPremio);
         localStorage.removeItem(KEY_PREMIO_ACTIVO);
       }
     }, 4200);

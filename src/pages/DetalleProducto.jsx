@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { ResenasProducto } from '../components/ResenasProducto';
 
 const COLORES_ACORDES = {
   'cálido especiado': { bg: '#d02c00', text: '#ffffff' },
@@ -38,7 +39,12 @@ const COLORES_ACORDES = {
   'tabaco': { bg: '#a0522d', text: '#ffffff' }
 };
 
-export function DetalleProducto({ productos = [], agregarAlCarrito }) {
+export function DetalleProducto({
+  productos = [],
+  agregarAlCarrito,
+  usuario,
+  mostrarNotificacion
+}) {
   const { id } = useParams();
   const navigate = useNavigate();
   const piramideRef = useRef(null);
@@ -336,6 +342,13 @@ export function DetalleProducto({ productos = [], agregarAlCarrito }) {
           </div>
         </article>
       </section>
+
+      <ResenasProducto
+        productoId={producto.id}
+        nombreProducto={producto.nombre}
+        usuario={usuario}
+        mostrarNotificacion={mostrarNotificacion}
+      />
     </main>
   );
 }

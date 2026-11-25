@@ -117,3 +117,61 @@ export const eliminarUsuarioApi = async (id) => {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.mensaje || "Error al eliminar usuario");
 };
+
+// --- RULETA Y CUPONES ---
+
+export const obtenerEstadoRuletaApi = async (email) => {
+  const res = await fetch(`${API_URL}/ruleta/estado?email=${encodeURIComponent(email)}`);
+  if (!res.ok) throw new Error("Error al consultar ruleta");
+  return res.json();
+};
+
+export const registrarGiroRuletaApi = async (datosGiro) => {
+  const res = await fetch(`${API_URL}/ruleta/girar`, {
+    method: "POST",
+    headers: getHeaders(),
+    body: JSON.stringify(datosGiro),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.mensaje || "No se pudo registrar el giro");
+  return data;
+};
+
+export const validarCuponApi = async (codigo, email) => {
+  const res = await fetch(`${API_URL}/ruleta/validar`, {
+    method: "POST",
+    headers: getHeaders(),
+    body: JSON.stringify({ codigo, email }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.mensaje || "Cupón inválido");
+  return data;
+};
+
+// --- RESEÑAS DE PRODUCTOS ---
+
+export const obtenerResenasProductoApi = async (productoId) => {
+  const res = await fetch(`${API_URL}/resenas/producto/${productoId}`);
+  if (!res.ok) throw new Error("Error al cargar reseñas");
+  return res.json();
+};
+
+export const crearResenaApi = async (resena) => {
+  const res = await fetch(`${API_URL}/resenas`, {
+    method: "POST",
+    headers: getHeaders(true),
+    body: JSON.stringify(resena),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.mensaje || "Error al publicar reseña");
+  return data;
+};
+
+export const eliminarResenaApi = async (id, email) => {
+  const res = await fetch(`${API_URL}/resenas/${id}?email=${encodeURIComponent(email)}`, {
+    method: "DELETE",
+    headers: getHeaders(true),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.mensaje || "Error al eliminar reseña");
+};

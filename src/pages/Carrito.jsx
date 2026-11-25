@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { validarCuponApi } from '../services/api';
 
 const ENVIO_GRATIS_DESDE = 60000;
 const VALOR_ENVIO = 4990;
@@ -48,6 +49,7 @@ export function Carrito({
   const [cuponAplicado, setCuponAplicado] = useState(leerCuponAplicado);
   const [codigoInput, setCodigoInput] = useState(() => leerCuponAplicado()?.codigo || '');
   const [mensajeCupon, setMensajeCupon] = useState({ tipo: '', texto: '' });
+  const [validandoCupon, setValidandoCupon] = useState(false);
 
   useEffect(() => {
     const sincronizar = () => {
@@ -73,39 +75,67 @@ export function Carrito({
     }
   }, [codigoInput, cuponAplicado]);
 
-  const handleAplicarCupon = (codigoManual = null) => {
+  const handleAplicarCupon = async (codigoManual = null) => {
     const codigoAValidar = (codigoManual ?? codigoInput).trim().toUpperCase();
     if (!codigoAValidar) {
       setMensajeCupon({ tipo: 'error', texto: 'Ingresa un código de cupón.' });
       return;
     }
 
-    const premio = leerPremioDisponible();
-    if (!premio) {
-      setMensajeCupon({
-        tipo: 'error',
-        texto: 'No tienes cupones disponibles en esta cuenta o ya fue utilizado.'
-      });
-      return;
-    }
+    const usuarioActivo = JSON.parse(localStorage.getItem('aroma_usuario_activo') || 'null');
+    const premioLocal = leerPremioDisponible();
+    const emailCuenta = usuarioActivo?.email || premioLocal?.email || '';
 
-    if (premio.codigo?.toUpperCase() !== codigoAValidar) {
-      setMensajeCupon({
-        tipo: 'error',
-        texto: 'El código ingresado no es válido para tu cuenta.'
-      });
-      return;
-    }
+    setValidandoCupon(true);
+    try {
+      // Valida el cupón contra el backend Spring Boot
+      const cuponServidor = await validarCuponApi(codigoAValidar, emailCuenta);
+      const datosCupon = {
+        ...premioLocal,
+        ...cuponServidor,
+        email: cuponServidor.usuarioEmail || emailCuenta
+      };
 
-    localStorage.setItem(KEY_CUPON_APLICADO, JSON.stringify(premio));
-    setCuponAplicado(premio);
-    setCodigoInput(premio.codigo);
-    setMensajeCupon({
-      tipo: 'exito',
-      texto: `¡Cupón ${premio.codigo} (${premio.texto}) aplicado correctamente!`
-    });
-    if (mostrarNotificacion) {
-      mostrarNotificacion(`¡Cupón ${premio.codigo} aplicado!`);
+      localStorage.setItem(KEY_PREMIO_ACTIVO, JSON.stringify(datosCupon));
+      localStorage.setItem(KEY_CUPON_APLICADO, JSON.stringify(datosCupon));
+      setCuponAplicado(datosCupon);
+      setCodigoInput(datosCupon.codigo);
+      setMensajeCupon({
+        tipo: 'exito',
+        texto: `¡Cupón ${datosCupon.codigo} (${datosCupon.texto}) aplicado correctamente!`
+      });
+      if (mostrarNotificacion) {
+        mostrarNotificacion(`¡Cupón ${datosCupon.codigo} aplicado!`);
+      }
+    } catch (errorApi) {
+      // Si el backend responde con error de validación (ej. usado / de otra cuenta)
+      const msg = (errorApi.message || '').toLowerCase();
+      if (
+        msg.includes('existe') ||
+        msg.includes('pertenece') ||
+        msg.includes('utilizado')
+      ) {
+        setMensajeCupon({ tipo: 'error', texto: errorApi.message });
+      } else if (premioLocal && premioLocal.codigo?.toUpperCase() === codigoAValidar) {
+        // Respaldo offline si el servidor está apagado
+        localStorage.setItem(KEY_CUPON_APLICADO, JSON.stringify(premioLocal));
+        setCuponAplicado(premioLocal);
+        setCodigoInput(premioLocal.codigo);
+        setMensajeCupon({
+          tipo: 'exito',
+          texto: `¡Cupón ${premioLocal.codigo} (${premioLocal.texto}) aplicado correctamente!`
+        });
+        if (mostrarNotificacion) {
+          mostrarNotificacion(`¡Cupón ${premioLocal.codigo} aplicado!`);
+        }
+      } else {
+        setMensajeCupon({
+          tipo: 'error',
+          texto: 'El código ingresado no es válido para tu cuenta.'
+        });
+      }
+    } finally {
+      setValidandoCupon(false);
     }
   };
 
@@ -116,7 +146,6 @@ export function Carrito({
     setMensajeCupon({ tipo: '', texto: '' });
   };
 
-  // Sincroniza cada ítem del carrito con el catálogo real (incluyendo tamaños ml)
   const itemsValidados = carrito.map((item) => {
     const mlItem = item.ml || item.tamano || null;
     const prodCatalogo =
@@ -165,7 +194,6 @@ export function Carrito({
     0
   );
 
-  // Cálculo del descuento solo si el cupón fue validado y aplicado
   const porcentajeDescuento =
     cuponAplicado?.tipo === 'porcentaje' && Number(cuponAplicado.valor) > 0
       ? Number(cuponAplicado.valor)
@@ -239,7 +267,7 @@ export function Carrito({
             <div className="col-lg-8">
               {hayErroresEnCarrito && (
                 <div className="alert alert-warning fw-semibold" role="alert">
-                  Uno o más productos de tu carrito superan el stock disponible o ya no están activos. Ajústalos para continuar con el pago.
+                  Uno o más productos de tu carrito superan el stock disponible actualmente. Ajústalos para continuar con el pago.
                 </div>
               )}
 
@@ -377,7 +405,6 @@ export function Carrito({
                   <h5 className="card-title fw-bold">Resumen de Boleta</h5>
                   <hr />
 
-                  {/* Sección interactiva de Cupón de Descuento */}
                   <div className="mb-3 p-3 rounded-3 border border-secondary">
                     <label htmlFor="input-cupon-carrito" className="form-label small fw-bold mb-2">
                       🎟️ ¿Tienes un cupón de descuento?
@@ -401,9 +428,10 @@ export function Carrito({
                           <button
                             type="button"
                             className="btn btn-warning text-dark fw-bold"
+                            disabled={validandoCupon}
                             onClick={() => handleAplicarCupon()}
                           >
-                            Aplicar
+                            {validandoCupon ? '...' : 'Aplicar'}
                           </button>
                         </div>
 
@@ -415,6 +443,7 @@ export function Carrito({
                             <button
                               type="button"
                               className="btn btn-link btn-sm p-0 text-warning fw-bold"
+                              disabled={validandoCupon}
                               onClick={() => handleAplicarCupon(premioDisponible.codigo)}
                             >
                               Usar ahora

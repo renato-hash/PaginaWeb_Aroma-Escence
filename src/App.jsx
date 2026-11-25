@@ -529,7 +529,12 @@ function AppContent() {
         <Route
           path="/producto/:id"
           element={
-            <DetalleProducto productos={productos} agregarAlCarrito={agregarAlCarrito} />
+            <DetalleProducto
+              productos={productos}
+              agregarAlCarrito={agregarAlCarrito}
+              usuario={usuario}
+              mostrarNotificacion={mostrarNotificacion}
+            />
           }
         />
         <Route
